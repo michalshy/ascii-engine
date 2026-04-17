@@ -1,0 +1,125 @@
+{
+  "rooms": [
+    {
+      "id": "entrance",
+      "name": "Brama Wejściowa",
+      "x": 2,
+      "y": 0,
+      "description": "Stoisz przed potężną kamienną bramą. Zimny wiatr wieje z głębi podziemi. Na murze widać stare runy, których nie potrafisz odczytać.",
+      "event": {
+        "type": "npc",
+        "name": "Stary Strażnik",
+        "dialogue": "Zawróć, póki możesz. To miejsce nie jest dla żywych."
+      },
+      "connections": ["torch_hall"]
+    },
+    {
+      "id": "torch_hall",
+      "name": "Sala Pochodni",
+      "x": 2,
+      "y": 1,
+      "description": "Długi korytarz oświetlony migoczącymi pochodniami. Cienie tańczą na wilgotnych ścianach. Pod nogami chrzęści żwir.",
+      "event": {
+        "type": "item",
+        "name": "Zardzewiały Miecz",
+        "description": "Leży na ziemi, pokryty kurzem, ale wciąż ostry."
+      },
+      "connections": ["entrance", "library", "armory", "well_room"]
+    },
+    {
+      "id": "library",
+      "name": "Opuszczona Biblioteka",
+      "x": 1,
+      "y": 1,
+      "description": "Półki pełne zbutwiałych ksiąg sięgają sufitu. Powietrze jest gęste od kurzu. Coś zaszeleściło w ciemnym kącie.",
+      "event": {
+        "type": "item",
+        "name": "Zwój Uzdrowienia",
+        "description": "Pergamin z wyblakłą formułą leczniczą. Wciąż emanuje słabą magią."
+      },
+      "connections": ["torch_hall", "secret_room"]
+    },
+    {
+      "id": "secret_room",
+      "name": "Sekretna Komnata",
+      "x": 0,
+      "y": 1,
+      "description": "Mały pokój ukryty za fałszywą ścianą. Na piedestale leży coś, co błyszczy w mroku.",
+      "event": {
+        "type": "item",
+        "name": "Amulet Ochrony",
+        "description": "Złoty amulet z niebieskim kamieniem. Czujesz ciepło gdy go dotykasz."
+      },
+      "connections": ["library"]
+    },
+    {
+      "id": "armory",
+      "name": "Zbrojownia",
+      "x": 3,
+      "y": 1,
+      "description": "Stojaki na broń, w większości puste. Na ścianie wiszą pordzewiałe tarcze z herbem, którego nie rozpoznajesz.",
+      "event": {
+        "type": "enemy",
+        "name": "Ożywiony Rycerz",
+        "health": 30,
+        "damage": 8,
+        "description": "Zbroja w kącie nagle ożywa. Puste hełmy zwraca się w twoją stronę."
+      },
+      "connections": ["torch_hall", "throne_room"]
+    },
+    {
+      "id": "well_room",
+      "name": "Komnata Studni",
+      "x": 2,
+      "y": 2,
+      "description": "Pośrodku stoi kamienna studnia. Z głębin dobiega odległy plusk wody. Na krawędzi ktoś wyrył napis: 'Nie pij'.",
+      "event": {
+        "type": "npc",
+        "name": "Błędny Pielgrzym",
+        "dialogue": "Widziałem skarb za tronem... ale strażnik... nie dałem rady. Weź to, przyda ci się."
+      },
+      "connections": ["torch_hall", "crypt"]
+    },
+    {
+      "id": "crypt",
+      "name": "Krypta",
+      "x": 2,
+      "y": 3,
+      "description": "Rzędy kamiennych sarkofagów ciągną się w mroku. Powietrze jest lodowate. Niektóre wieka są przesunięte.",
+      "event": {
+        "type": "enemy",
+        "name": "Ghoul",
+        "health": 20,
+        "damage": 12,
+        "description": "Z otwartego sarkofagu wyłania się blada postać o świecących oczach."
+      },
+      "connections": ["well_room", "throne_room"]
+    },
+    {
+      "id": "throne_room",
+      "name": "Sala Tronowa",
+      "x": 3,
+      "y": 3,
+      "description": "Ogromna sala z wysokim sklepieniem. Na podwyższeniu stoi kamienny tron porośnięty mchem. Za tronem widać ciężkie drzwi.",
+      "event": {
+        "type": "enemy",
+        "name": "Król Nieumarłych",
+        "health": 60,
+        "damage": 15,
+        "description": "Postać na tronie unosi głowę. Korona na czaszce lśni złowieszczym blaskiem. Wstaje powoli."
+      },
+      "connections": ["armory", "crypt", "treasure_vault"]
+    },
+    {
+      "id": "treasure_vault",
+      "name": "Skarbiec",
+      "x": 4,
+      "y": 3,
+      "description": "Złoto i klejnoty piętrzą się w stosach. Znalazłeś legendarny skarbiec. Twoja przygoda dobiegła końca... a może dopiero się zaczyna?",
+      "event": {
+        "type": "nothing"
+      },
+      "connections": ["throne_room"]
+    }
+  ]
+}
