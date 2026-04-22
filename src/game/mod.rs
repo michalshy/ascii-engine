@@ -17,6 +17,8 @@ use repl::Repl;
 
 use crate::game::{render::Renderer, repl::Command};
 
+
+
 pub struct Game {
     renderer: Renderer,
 
@@ -24,7 +26,7 @@ pub struct Game {
     repl: Repl,
     stats: Stats,    
 
-    running: bool,  
+    running: bool
 }
 
 impl Game {
@@ -35,7 +37,7 @@ impl Game {
             map: loaded_map, 
             repl: Repl::new(), 
             stats: Stats{}, 
-            running: true, 
+            running: true
         }
     }
 
@@ -50,7 +52,7 @@ impl Game {
             // renderer
             terminal.draw(|frame| {
                 self.renderer.render(
-                    frame, &self.map, &self.stats, &self.repl
+                    frame, &self.map, &self.stats, &self.repl,
                 );
             })?;
             // animations, logic etc
@@ -63,11 +65,13 @@ impl Game {
                         KeyCode::Backspace => { self.repl.input_buffer.pop(); 
                     }                                                         
                         KeyCode::Enter => {
-                            let input =                                       
-                    self.repl.input_buffer.drain(..).collect::<String>();     
+                            let input = self.repl.input_buffer.drain(..).collect::<String>();     
                             let cmd = repl::parse_command(&input);
                             self.repl.history.push(format!("> {}", input));   
                             self.handle_command(cmd);
+                        }
+                        KeyCode::Tab => {
+                            self.renderer.switch_perspective();
                         }
                         _ => {}
                     }          

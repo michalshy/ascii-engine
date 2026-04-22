@@ -6,11 +6,26 @@ use ratatui::{
 
 use crate::game::{map::Map, repl::Repl, room::Room, stats::Stats};
 
-pub struct Renderer;
+#[derive(PartialEq, Eq)]
+enum Perspective {
+    Room,
+    Map,
+}
+
+pub struct Renderer {
+    perspective: Perspective    
+}
 
 impl Renderer {
     pub fn new() -> Renderer {
-        return Renderer{}
+        return Renderer{
+            perspective: Perspective::Map,
+        }
+    }
+
+    pub fn switch_perspective(&mut self) {
+        self.perspective = if self.perspective == Perspective::Map { Perspective::Room } else { Perspective::Map };
+            
     }
 
     pub fn render(
@@ -32,12 +47,21 @@ impl Renderer {
         ])
         .split(vertical[0]);
 
-        self.render_map(frame, horizontal[0], map);
+        let current_room = map.get_current_room().expect("Room out of bounds");
+
+        match &self.perspective {
+            Perspective::Room => {
+                self.render_room(frame, horizontal[0], current_room);
+            },
+            Perspective::Map => {
+                self.render_map(frame, horizontal[0], map, current_room);
+            }
+        }
         self.render_stats(frame, horizontal[1], stats);
         self.render_repl(frame, vertical[1], repl);
     }
 
-    fn render_map(&self, frame: &mut Frame, area: Rect, map: &Map) {
+    fn render_map(&self, frame: &mut Frame, area: Rect, map: &Map, room: &Room) {
         let max_x = map.rooms.iter().map(|r| r.x).max().unwrap_or(0);
         let max_y = map.rooms.iter().map(|r| r.y).max().unwrap_or(0);
     
@@ -49,7 +73,7 @@ impl Renderer {
         let mut lines: Vec<Line> = Vec::new();
     
         for y in 0..=max_y {
-            lines.push(build_room_row(&by_pos, y, max_x, CELL_W));
+            lines.push(build_room_row(&by_pos, room, y, max_x, CELL_W));
             if y < max_y {
                 lines.push(build_conn_row(&by_pos, y, max_x, CELL_W));
             }
@@ -68,6 +92,13 @@ impl Renderer {
         );
         frame.render_widget(
             Block::bordered().title(" Map "),
+            area,
+        );
+    }
+
+    fn render_room(&self, frame: &mut Frame, area: Rect, room: &Room) {
+        frame.render_widget(
+            Block::bordered().title(" Room "),
             area,
         );
     }
@@ -108,22 +139,27 @@ impl Renderer {
 }
 
 
-fn build_room_row<'a>(
-    by_pos: &HashMap<(u32, u32), &'a Room>,
+fn build_room_row<'a>(                                    
+    by_pos: &HashMap<(u32, u32), &'a Room>,               
+    current: &Room,                                       
     y: u32,
-    max_x: u32,
-    cell_w: usize,
+    max_x: u32,                                           
+    cell_w: usize,                                        
 ) -> Line<'a> {
     let mut spans: Vec<Span> = Vec::new();
 
     for x in 0..=max_x {
         match by_pos.get(&(x, y)) {
             Some(room) => {
-                // sama komórka — jeden Span żeby terminal nie rozciągał
-                let label = format!("[{:^width$}]", "R", width = cell_w - 2);
-                spans.push(Span::styled(label, Style::default().fg(Color::White)));
+                let style = if room.id == current.id {                    
+                    Style::default().fg(Color::Yellow)                    
+                } else {
+                    Style::default().fg(Color::White)                     
+                };              
+                let label = format!("[{:^width$}]", "R", width = cell_w -
+                2);                                                       
+                spans.push(Span::styled(label, style));
 
-                // connector w prawo
                 let has_right = by_pos
                     .get(&(x + 1, y))
                     .map_or(false, |r| room.connections.contains(&r.id));
