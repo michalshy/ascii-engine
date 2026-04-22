@@ -15,7 +15,7 @@ use room::Room;
 use stats::Stats;
 use repl::Repl;
 
-use crate::game::render::Renderer;
+use crate::game::{render::Renderer, repl::Command};
 
 pub struct Game {
     renderer: Renderer,
@@ -53,15 +53,24 @@ impl Game {
                     frame, &self.map, &self.stats, &self.repl
                 );
             })?;
-            // frame
-            self.frame();
-            // events
+            // animations, logic etc
+            self.logic();
+            // repl
             if event::poll(Duration::from_millis(100))? {
                 if let Event::Key(key) = event::read()? {
-                    match key.code {
-                        KeyCode::Char('q') => self.running = false,
+                    match key.code {                                          
+                        KeyCode::Char(c) => self.repl.input_buffer.push(c),
+                        KeyCode::Backspace => { self.repl.input_buffer.pop(); 
+                    }                                                         
+                        KeyCode::Enter => {
+                            let input =                                       
+                    self.repl.input_buffer.drain(..).collect::<String>();     
+                            let cmd = repl::parse_command(&input);
+                            self.repl.history.push(format!("> {}", input));   
+                            self.handle_command(cmd);
+                        }
                         _ => {}
-                    }
+                    }          
                 }
             }
         }
@@ -71,7 +80,22 @@ impl Game {
         Ok(())
     }
 
-    fn frame(&self) {
-
+    fn logic(&self) {
+        
     } 
+
+    fn handle_command(&mut self, cmd: Command) {
+        match cmd {                                           
+          Command::Go(dir) => { /* move player */ }
+          Command::Look => { /* describe current room */ }  
+          Command::Fight => { /* fight monster */ },          
+          Command::Talk => { /* talk to npc */ }     
+          Command::Use(item) => { /* use item */ },          
+          Command::Quit => { self.running = false }     
+          Command::Unknown(raw) => {                        
+              self.repl.history.push(format!("Unknown       
+  command: {}", raw));
+          }                                                 
+      }    
+    }
 }
