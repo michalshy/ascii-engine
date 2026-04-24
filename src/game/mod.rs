@@ -3,6 +3,8 @@ mod room;
 mod repl;
 mod stats;
 mod render;
+mod story;
+
 use ratatui::{Terminal, backend::CrosstermBackend};
 use crossterm::{
     event::{self, Event, KeyCode},
@@ -14,16 +16,16 @@ use map::Map;
 use room::Room;
 use stats::Stats;
 use repl::Repl;
+use story::Story;
 
 use crate::game::{render::Renderer, repl::Command};
-
-
 
 pub struct Game {
     renderer: Renderer,
 
     map: Map,
     repl: Repl,
+    story: Story,
     stats: Stats,    
 
     running: bool
@@ -36,6 +38,7 @@ impl Game {
             renderer: Renderer::new(), 
             map: loaded_map, 
             repl: Repl::new(), 
+            story: Story::new(),
             stats: Stats{}, 
             running: true
         }
@@ -52,7 +55,7 @@ impl Game {
             // renderer
             terminal.draw(|frame| {
                 self.renderer.render(
-                    frame, &self.map, &self.stats, &self.repl,
+                    frame, &self.map, &self.stats, &self.repl, &self.story
                 );
             })?;
             // animations, logic etc
@@ -84,13 +87,16 @@ impl Game {
         Ok(())
     }
 
-    fn logic(&self) {
-        
+    fn logic(&mut self) {
+        let current_room = self.map.get_current_room();
+        if current_room.is_some() {
+            self.story.update(current_room.unwrap());
+        }
     } 
 
     fn handle_command(&mut self, cmd: Command) {
         match cmd {                                           
-          Command::Go(dir) => { /* move player */ }
+          Command::Go(dir) => {  }
           Command::Look => { /* describe current room */ }  
           Command::Fight => { /* fight monster */ },          
           Command::Talk => { /* talk to npc */ }     

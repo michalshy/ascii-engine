@@ -1,5 +1,11 @@
 use serde::Deserialize;
 
+#[derive(Deserialize, PartialEq, PartialOrd)]
+pub struct Coords {                                       
+    pub x: u32,
+    pub y: u32,                                           
+} 
+
 #[derive(Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum Event {
@@ -23,9 +29,9 @@ pub enum Event {
 #[derive(Deserialize)]
 pub struct Room {
     pub id: String,
-    pub x: u32,
-    pub y: u32,
+    pub name: String,
+    pub pos: Coords,
+    pub description: String,
     pub connections: Vec<String>,
-    name: String,
     event: Event,
 }

@@ -1,11 +1,12 @@
 use serde::Deserialize;
-use crate::game::Room;
+use crate::game::room::{Coords, Room};
 
-#[derive(Deserialize)]
-    pub struct Coords {                                       
-        pub x: u32,
-        pub y: u32,                                           
-    } 
+enum Direction {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+}
 
 #[derive(Deserialize)]
 pub struct Map {
@@ -21,7 +22,9 @@ impl Map {
     }
 
     pub fn get_current_room(&self) -> Option<&Room> {  
-        self.rooms.iter().find(|r| r.x == self.pos.x && r.y == self.pos.y)      
+        self.rooms.iter().find(|r| r.pos == self.pos)      
     }
+
+
 }
 

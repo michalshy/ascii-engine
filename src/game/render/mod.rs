@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use ratatui::{
     Frame, 
-    layout::{Constraint, Layout, Margin, Rect}, style::{Color, Style}, text::{Line, Span}, widgets::{Block, Paragraph}};
+    layout::{Constraint, Layout, Margin, Rect}, style::{Color, Style}, text::{Line, Span}, widgets::{Block, Paragraph, Wrap}};
 
-use crate::game::{map::Map, repl::Repl, room::Room, stats::Stats};
+use crate::game::{map::Map, repl::Repl, room::Room, stats::Stats, story::Story};
 
 #[derive(PartialEq, Eq)]
 enum Perspective {
@@ -34,6 +34,7 @@ impl Renderer {
         map: &Map,
         stats: &Stats,
         repl: &Repl,
+        story: &Story,
     ) {
         let vertical = Layout::vertical([
             Constraint::Fill(1),
@@ -42,33 +43,50 @@ impl Renderer {
         .split(frame.area());
 
         let horizontal = Layout::horizontal([
+            Constraint::Length(25),
             Constraint::Fill(1),
-            Constraint::Length(30),
+            Constraint::Length(25),
         ])
         .split(vertical[0]);
 
         let current_room = map.get_current_room().expect("Room out of bounds");
 
+        self.render_story(frame, horizontal[0], story);
         match &self.perspective {
             Perspective::Room => {
-                self.render_room(frame, horizontal[0], current_room);
+                self.render_room(frame, horizontal[1], current_room);
             },
             Perspective::Map => {
-                self.render_map(frame, horizontal[0], map, current_room);
+                self.render_map(frame, horizontal[1], map, current_room);
             }
         }
-        self.render_stats(frame, horizontal[1], stats);
+        self.render_stats(frame, horizontal[2], stats);
         self.render_repl(frame, vertical[1], repl);
     }
 
+    fn render_story(&self, frame: &mut Frame, area: Rect, story: &Story) {
+        let block = Block::bordered()
+            .title(" Dialogue ")
+            .border_style(Style::default().fg(Color::Yellow));
+
+        let dialog = story.get_current_dialogue();
+
+        let paragraph = Paragraph::new(dialog.clone())
+            .block(block)
+            .wrap(Wrap { trim: true })
+            .style(Style::default().fg(Color::White));
+
+        frame.render_widget(paragraph, area);
+    }
+
     fn render_map(&self, frame: &mut Frame, area: Rect, map: &Map, room: &Room) {
-        let max_x = map.rooms.iter().map(|r| r.x).max().unwrap_or(0);
-        let max_y = map.rooms.iter().map(|r| r.y).max().unwrap_or(0);
+        let max_x = map.rooms.iter().map(|r| r.pos.x).max().unwrap_or(0);
+        let max_y = map.rooms.iter().map(|r| r.pos.y).max().unwrap_or(0);
     
         const CELL_W: usize = 3; 
     
         let by_pos: HashMap<(u32, u32), &Room> =
-            map.rooms.iter().map(|r| ((r.x, r.y), r)).collect();
+            map.rooms.iter().map(|r| ((r.pos.x, r.pos.y), r)).collect();
     
         let mut lines: Vec<Line> = Vec::new();
     
