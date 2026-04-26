@@ -2,8 +2,8 @@ use serde::Deserialize;
 
 #[derive(Deserialize, PartialEq, PartialOrd)]
 pub struct Coords {                                       
-    pub x: u32,
-    pub y: u32,                                           
+    pub x: i32,
+    pub y: i32,                                           
 } 
 
 #[derive(Deserialize)]

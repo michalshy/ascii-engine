@@ -96,7 +96,7 @@ impl Game {
 
     fn handle_command(&mut self, cmd: Command) {
         match cmd {                                           
-          Command::Go(dir) => {  }
+          Command::Go(dir) => { self.map.change_room(dir) }
           Command::Look => { /* describe current room */ }  
           Command::Fight => { /* fight monster */ },          
           Command::Talk => { /* talk to npc */ }     
