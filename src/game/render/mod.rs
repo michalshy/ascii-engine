@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs, hash::Hash};
+use std::{collections::HashMap, fs};
 
 use ratatui::{
     Frame, 
@@ -42,12 +42,12 @@ impl Renderer {
     ) {
         let vertical = Layout::vertical([
             Constraint::Fill(1),
+            Constraint::Length(16),
             Constraint::Length(8),
         ])
         .split(frame.area());
 
         let horizontal = Layout::horizontal([
-            Constraint::Length(25),
             Constraint::Fill(1),
             Constraint::Length(25),
         ])
@@ -55,23 +55,23 @@ impl Renderer {
 
         let current_room = map.get_current_room().expect("Room out of bounds");
 
-        self.render_story(frame, horizontal[0], story);
         match &self.perspective {
             Perspective::Room => {
-                self.render_room(frame, horizontal[1], current_room);
+                self.render_room(frame, horizontal[0], current_room);
             },
             Perspective::Map => {
-                self.render_map(frame, horizontal[1], map, current_room);
+                self.render_map(frame, horizontal[0], map, current_room);
             }
         }
-        self.render_stats(frame, horizontal[2], stats);
-        self.render_repl(frame, vertical[1], repl);
+        self.render_stats(frame, horizontal[1], stats);
+        self.render_story(frame, vertical[1], story);
+        self.render_repl(frame, vertical[2], repl);
     }
 
     fn render_story(&self, frame: &mut Frame, area: Rect, story: &Story) {
         let block = Block::bordered()
             .title(" Dialogue ")
-            .border_style(Style::default().fg(Color::Yellow));
+            .border_style(Style::default().fg(Color::White));
 
         let dialog = story.get_current_dialogue();
 
@@ -251,10 +251,9 @@ fn build_conn_row<'a>(
                 .map_or(false, |r| room.connections.contains(&r.id))
         });
 
-        // connector w dół wycentrowany pod komórką
         let connector = format!("{:^width$}", if has_down { "|" } else { " " }, width = cell_w);
         spans.push(Span::raw(connector));
-        spans.push(Span::raw("   ")); // wyrównanie do "───"
+        spans.push(Span::raw("   "));
     }
 
     Line::from(spans)

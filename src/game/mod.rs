@@ -61,7 +61,7 @@ impl Game {
             // animations, logic etc
             self.logic();
             // repl
-            if event::poll(Duration::from_millis(100))? {
+            if event::poll(Duration::from_millis(32))? {
                 if let Event::Key(key) = event::read()? {
                     match key.code {                                          
                         KeyCode::Char(c) => self.repl.input_buffer.push(c),
@@ -70,11 +70,17 @@ impl Game {
                         KeyCode::Enter => {
                             let input = self.repl.input_buffer.drain(..).collect::<String>();     
                             let cmd = repl::parse_command(&input);
-                            self.repl.history.push(format!("> {}", input));   
+                            self.repl.history.push(format!("{}", input));   
                             self.handle_command(cmd);
                         }
                         KeyCode::Tab => {
                             self.renderer.switch_perspective();
+                        }
+                        KeyCode::Up => {
+                            self.repl.history_up();
+                        }
+                        KeyCode::Down => {
+                            self.repl.history_down();
                         }
                         _ => {}
                     }          
@@ -96,16 +102,14 @@ impl Game {
 
     fn handle_command(&mut self, cmd: Command) {
         match cmd {                                           
-          Command::Go(dir) => { self.map.change_room(dir) }
-          Command::Look => { /* describe current room */ }  
-          Command::Fight => { /* fight monster */ },          
-          Command::Talk => { /* talk to npc */ }     
-          Command::Use(item) => { /* use item */ },          
-          Command::Quit => { self.running = false }     
-          Command::Unknown(raw) => {                        
-              self.repl.history.push(format!("Unknown       
-  command: {}", raw));
-          }                                                 
-      }    
+            Command::Go(dir) => { self.map.change_room(dir) }
+            Command::Look => { /* describe current room */ }  
+            Command::Fight => { /* fight monster */ },          
+            Command::Talk => { /* talk to npc */ }     
+            Command::Use(item) => { /* use item */ },          
+            Command::Quit => { self.running = false }     
+            Command::Unknown(raw) => { /* nothing */ }                                                 
+        }  
+        self.repl.reset_idx();  
     }
 }
