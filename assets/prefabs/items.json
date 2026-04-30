@@ -1,0 +1,623 @@
+{
+  "_meta": {
+    "file": "items.json",
+    "description": "All item definitions. Every item has a complete visual description, flavor text, and mechanical effect. Items are divided into categories. Tier 1–5 controls rarity and loot table placement.",
+    "fields": {
+      "id": "Unique item identifier",
+      "name": "Display name",
+      "tier": "1–5 rarity/power tier",
+      "category": "weapon | armor | consumable | material | quest | currency",
+      "tags": "Used by loot tables and shop inventories",
+      "weight": "Spawn probability in applicable loot tables",
+      "description": "What the item looks like when examined",
+      "flavor": "Italicized lore line shown in the inventory panel",
+      "effect": "Mechanical effect on use or equip",
+      "value": "Base sell/buy value in gold"
+    }
+  },
+
+  "weapons": [
+    {
+      "id": "rusty_sword",
+      "name": "Rusty Sword",
+      "tier": 1,
+      "category": "weapon",
+      "tags": ["melee", "one_handed", "common"],
+      "weight": 10,
+      "description": "A single-edged blade about two feet long, the fuller clogged with rust. The crossguard is bent. The grip-wrapping is gone, replaced at some point with strips of cloth that have since hardened into the shape of a handle. The blade holds an edge despite everything — someone sharpened this relatively recently.",
+      "flavor": "Better than nothing. Barely.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 3,
+        "damage_type": "slashing"
+      },
+      "value": 5
+    },
+    {
+      "id": "bone_dagger",
+      "name": "Bone Dagger",
+      "tier": 1,
+      "category": "weapon",
+      "tags": ["melee", "light", "thrown", "one_handed"],
+      "weight": 8,
+      "description": "A six-inch blade carved from a single bone — something large, possibly human. The edge has been ground to a point and both sides beveled with a rough stone. No guard. The grip is the narrowed end of the bone, wrapped in a strip of dried leather. Functional in its crudeness.",
+      "flavor": "You'd rather not know what this was before it was a dagger.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 4,
+        "damage_type": "piercing",
+        "can_throw": true,
+        "throw_range": 20
+      },
+      "value": 10
+    },
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "tier": 2,
+      "category": "weapon",
+      "tags": ["melee", "one_handed", "common"],
+      "weight": 8,
+      "description": "A standard infantry blade, thirty inches from pommel to tip. The iron is dark with age but not rusted — the metal was treated. The edge has a few nicks but holds. The crossguard is plain, rectangular, utilitarian. The pommel is a flattened sphere. This sword was made by the thousands and carried by men whose names nobody remembers.",
+      "flavor": "A sword for doing the job, not for admiring afterward.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 6,
+        "damage_type": "slashing"
+      },
+      "value": 25
+    },
+    {
+      "id": "silver_dagger",
+      "name": "Silver Dagger",
+      "tier": 3,
+      "category": "weapon",
+      "tags": ["melee", "light", "thrown", "silver", "magic_adjacent"],
+      "weight": 4,
+      "description": "Eight inches of pure silver, hand-ground to a needle point. The blade is slightly warm regardless of ambient temperature. The crossguard is worked into the shape of two spread wings. The grip is wrapped in white doeskin that has not aged. When held near the undead, a faint harmonic note rises from the blade — not loud, but consistent.",
+      "flavor": "Someone spent a great deal to have this made. It has fulfilled its purpose many times.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 5,
+        "damage_type": "piercing",
+        "can_throw": true,
+        "throw_range": 20,
+        "bonus_vs_tags": ["undead", "demon"],
+        "bonus_damage_vs": 8
+      },
+      "value": 80
+    },
+    {
+      "id": "heavy_mace_ancient",
+      "name": "Ancient Mace",
+      "tier": 4,
+      "category": "weapon",
+      "tags": ["melee", "two_handed", "blunt", "holy"],
+      "weight": 2,
+      "description": "A flanged mace — six flanges of hardened steel around a weighted iron head — on a thirty-inch handle wrapped in cracked leather. Religious iconography is engraved on every flange: a closed eye, an open hand, a sun divided into seven rays. The steel is without flaw. The head is stained in a way that washing has never fully cleared. This is an instrument of a specific theological purpose.",
+      "flavor": "This weapon has broken the undead for five generations of clergy. It is very good at its one purpose.",
+      "effect": {
+        "type": "equip",
+        "slot": "both_hands",
+        "damage_bonus": 12,
+        "damage_type": "blunt",
+        "bonus_vs_tags": ["undead"],
+        "bonus_damage_vs": 6,
+        "special": "Counts as holy damage against undead"
+      },
+      "value": 200
+    },
+    {
+      "id": "dark_dagger",
+      "name": "Shadow-Forged Dagger",
+      "tier": 4,
+      "category": "weapon",
+      "tags": ["melee", "light", "magic", "shadow", "one_handed"],
+      "weight": 2,
+      "description": "A twelve-inch blade that absorbs light rather than reflecting it. In a lit room it is a dark shape with no sheen. In darkness it is invisible without any special ability — your hand simply disappears at the hilt. The edge cannot be seen regardless of angle. The blade is not cold or warm; it is the absence of temperature. Gripping it feels like holding shadow that has agreed to be solid, temporarily.",
+      "flavor": "The edge exists in the space between material and void.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 10,
+        "damage_type": "shadow",
+        "special_1": "Attacks ignore target's defense value",
+        "special_2": "First strike of combat deals double damage"
+      },
+      "value": 300
+    },
+    {
+      "id": "royal_scepter",
+      "name": "Royal Scepter",
+      "tier": 5,
+      "category": "weapon",
+      "tags": ["melee", "magic", "one_handed", "boss_drop", "unique"],
+      "weight": 1,
+      "description": "Two feet of worked gold around an iron core, crowned with a dark gem the size of a plum. The gem is not a gem but a solidified mass of necromantic energy that has crystallized over centuries into something that resembles one. The scepter is heavier than it looks. Undead creatures within ten feet react to it — they orient toward it, some involuntarily. In the hand of the Undead King it was a weapon. In your hand it is a question of whether you have the will to use it as one.",
+      "flavor": "In the right hands, it grants dominion over death. The question is whose hands are right.",
+      "effect": {
+        "type": "equip",
+        "slot": "main_hand",
+        "damage_bonus": 15,
+        "damage_type": "necrotic",
+        "active_ability": {
+          "name": "Command Undead",
+          "description": "Once every 5 turns: Choose one undead enemy in the room. That enemy fights for you until the end of combat or until it is killed. It acts on your initiative. Willpower check DC 14 to maintain control if it takes damage from your allies.",
+          "cooldown_turns": 5
+        }
+      },
+      "value": 800
+    }
+  ],
+
+  "armor": [
+    {
+      "id": "leather_vest",
+      "name": "Cracked Leather Vest",
+      "tier": 1,
+      "category": "armor",
+      "tags": ["armor", "light", "chest", "common"],
+      "weight": 10,
+      "description": "A sleeveless vest of tanned leather, hardened and cracked with age. The stitching has gone in several places and been re-done with a heavier thread of a different color. The shoulder seams are reinforced with a double layer. It fits badly and the smell of old leather is pronounced. It will stop a blade from going all the way in, and that is exactly what armor is for.",
+      "flavor": "Someone cared enough to maintain it once. That someone is likely dead.",
+      "effect": {
+        "type": "equip",
+        "slot": "chest",
+        "defense_bonus": 2,
+        "armor_type": "light"
+      },
+      "value": 15
+    },
+    {
+      "id": "iron_helm_broken",
+      "name": "Cracked Iron Helm",
+      "tier": 1,
+      "category": "armor",
+      "tags": ["armor", "medium", "head", "common"],
+      "weight": 6,
+      "description": "A simple iron bowl helm with a nasal guard, cracked from the left brow to below the cheekguard. The crack was closed again with a poured lead repair that holds but is not comfortable to look at. The interior padding has compressed into nothing. It sits slightly too high on the head. Whatever caused the crack came from above and from the left.",
+      "flavor": "You'd rather not know what made that crack.",
+      "effect": {
+        "type": "equip",
+        "slot": "head",
+        "defense_bonus": 1,
+        "armor_type": "medium"
+      },
+      "value": 12
+    },
+    {
+      "id": "knight_pauldron",
+      "name": "Iron Pauldron",
+      "tier": 2,
+      "category": "armor",
+      "tags": ["armor", "medium", "shoulder"],
+      "weight": 5,
+      "description": "A single left pauldron from a set of plate that is otherwise nowhere to be found. Three overlapping lames of iron, articulated on leather straps. The surface still carries ghost-traces of black lacquer. The attachment straps are intact but stiff. It covers the left shoulder and upper arm completely, which is exactly where most sword strikes arrive.",
+      "flavor": "Half a suit of armor is still worth wearing.",
+      "effect": {
+        "type": "equip",
+        "slot": "shoulders",
+        "defense_bonus": 3,
+        "armor_type": "medium"
+      },
+      "value": 40
+    },
+    {
+      "id": "tattered_cloak",
+      "name": "Wool Cloak",
+      "tier": 1,
+      "category": "armor",
+      "tags": ["armor", "light", "cloak", "stealth"],
+      "weight": 7,
+      "description": "A heavy wool cloak in what was once dark grey, now uneven from water damage and the degradation of the dye. The hem is gone, replaced by a ragged edge. The clasp is a plain iron ring. The wool is still dense — water beads on it — and at a distance, in poor light, the color is unremarkable enough to disappear into shadow.",
+      "flavor": "Not stylish. Functional.",
+      "effect": {
+        "type": "equip",
+        "slot": "back",
+        "defense_bonus": 1,
+        "armor_type": "light",
+        "stealth_bonus": 1
+      },
+      "value": 8
+    },
+    {
+      "id": "mage_robe_tattered",
+      "name": "Sigil-Worked Robe",
+      "tier": 3,
+      "category": "armor",
+      "tags": ["armor", "light", "chest", "magic", "caster"],
+      "weight": 3,
+      "description": "A full-length robe of dark cloth, once fine enough that the weave is still tight despite its age. Hundreds of sigils are embroidered in thread that has faded from deep violet to near-invisible grey. They cover every surface: collar, cuffs, hem, the lining. The cloth crackles faintly with residual magic. Worn, the sigils press against the skin and pulse occasionally, warm and irregular, like a second heartbeat.",
+      "flavor": "Magic leaves traces in cloth the way smoke leaves traces in curtains.",
+      "effect": {
+        "type": "equip",
+        "slot": "chest",
+        "defense_bonus": 1,
+        "armor_type": "light",
+        "magic_power_bonus": 4,
+        "magic_resistance_bonus": 2
+      },
+      "value": 90
+    },
+    {
+      "id": "crypt_warden_shield",
+      "name": "Warden's Shield",
+      "tier": 4,
+      "category": "armor",
+      "tags": ["armor", "heavy", "shield"],
+      "weight": 1,
+      "description": "A tower shield, four feet tall and two wide, of iron-banded wood with a steel face. The steel face has been worked into the screaming countenance of a figure in extremis — open mouth, compressed eyes, every line of the face an expression of final terror. This is not decorative. This is a warning to those who face it. The grip on the back is undamaged. The straps are new — someone replaced them recently.",
+      "flavor": "The face is screaming. It was designed that way.",
+      "effect": {
+        "type": "equip",
+        "slot": "off_hand",
+        "defense_bonus": 8,
+        "armor_type": "heavy",
+        "active_ability": {
+          "name": "Block",
+          "description": "Once per combat, as a reaction to being hit: Negate all damage from that attack. Usable once more per combat on a roll of 5–6 after each subsequent hit."
+        }
+      },
+      "value": 250
+    },
+    {
+      "id": "undead_king_crown",
+      "name": "Crown of the Undead King",
+      "tier": 5,
+      "category": "armor",
+      "tags": ["armor", "head", "magic", "cursed", "unique", "boss_drop"],
+      "weight": 1,
+      "description": "The crown that sat on the Undead King's skull — iron worked into a complex form of interlocking spines and arches, with dark gems set at eight points. The gems still pulse with a cold green light, slower now than when the King wore it, but not stopped. It is heavier than iron should be. Wearing it: you immediately feel observed, evaluated, sorted into a category. The dungeon recognizes the crown. The undead within it hesitate, briefly, before attacking.",
+      "flavor": "All crowns carry their burdens. This one carries more than most.",
+      "effect": {
+        "type": "equip",
+        "slot": "head",
+        "defense_bonus": 10,
+        "damage_bonus": 8,
+        "curse": {
+          "name": "Burden of Kingship",
+          "description": "Maximum HP reduced by 10 permanently while equipped. Cannot be removed without a Remove Curse scroll or shrine blessing."
+        },
+        "passive": "Undead enemies hesitate on first sight of the crown — they do not attack for 1 turn unless attacked first."
+      },
+      "value": 1000
+    }
+  ],
+
+  "consumables": [
+    {
+      "id": "healing_scroll",
+      "name": "Healing Scroll",
+      "tier": 1,
+      "category": "consumable",
+      "tags": ["scroll", "healing", "common"],
+      "weight": 8,
+      "description": "A strip of parchment about eight inches long and three wide, rolled and tied with a red thread. The formula written on it is in a healer's hand — small, precise, heavily annotated in the margins. The ink has faded from black to brown but the magic in the words has not faded with it. Reading the words aloud causes them to lift from the page and dissipate.",
+      "flavor": "The ink is pale but the magic is old and patient.",
+      "effect": {
+        "type": "use",
+        "action": "heal",
+        "amount": 15,
+        "consumed_on_use": true
+      },
+      "value": 20
+    },
+    {
+      "id": "health_potion_minor",
+      "name": "Minor Health Potion",
+      "tier": 1,
+      "category": "consumable",
+      "tags": ["potion", "healing", "common"],
+      "weight": 10,
+      "description": "A thumb-sized glass vial stopped with a cork sealed in red wax. The liquid inside is deep red, almost opaque, and catches the light like ruby glass. It smells of iron and dried herbs — yarrow, probably, and something bitter underneath. It tastes the same way it smells. It works exactly as advertised and no better.",
+      "flavor": "Tastes terrible. Works perfectly.",
+      "effect": {
+        "type": "use",
+        "action": "heal",
+        "amount": 20,
+        "consumed_on_use": true
+      },
+      "value": 25
+    },
+    {
+      "id": "health_potion_standard",
+      "name": "Health Potion",
+      "tier": 2,
+      "category": "consumable",
+      "tags": ["potion", "healing", "common"],
+      "weight": 7,
+      "description": "A standard apothecary flask, two inches across, sealed with wax over a glass stopper. The liquid inside is the same deep red as the minor version but more concentrated — it moves slowly when the flask is tilted. The wax seal is marked with a triangular stamp: three lines meeting at a point, the sign of the Healers' Guild. The Guild has been dissolved for forty years, but the potion is genuine.",
+      "flavor": "Standard-issue for dungeon work. Reliable as anything in this place can be.",
+      "effect": {
+        "type": "use",
+        "action": "heal",
+        "amount": 40,
+        "consumed_on_use": true
+      },
+      "value": 60
+    },
+    {
+      "id": "health_potion_major",
+      "name": "Major Health Potion",
+      "tier": 3,
+      "category": "consumable",
+      "tags": ["potion", "healing", "rare"],
+      "weight": 3,
+      "description": "A wide-mouthed flask four inches across, the glass thick and slightly greenish from its age. The liquid inside is so dark a red it appears black except where the light catches the very edge of it. It swirls on its own, slowly counterclockwise, visible through the glass. The stopper is wax over cork over a second wax layer — triple-sealed. When opened, the smell is almost overwhelming: iron, herbs, and something warm and animal underneath.",
+      "flavor": "They say this can bring someone back from the brink. They're not wrong.",
+      "effect": {
+        "type": "use",
+        "action": "heal",
+        "amount": 80,
+        "consumed_on_use": true
+      },
+      "value": 150
+    },
+    {
+      "id": "antidote",
+      "name": "Antidote",
+      "tier": 2,
+      "category": "consumable",
+      "tags": ["potion", "cure", "common"],
+      "weight": 6,
+      "description": "A small vial of clear liquid with a green tinge. The cork is stained from what it has been used against. Shaking it produces a foam that settles within seconds. The smell is bitter and medicinal — concentrated willow bark and something sharper, chemical in origin. It removes poison from the blood efficiently and unpleasantly.",
+      "flavor": "The taste is punishment for being bitten in the first place.",
+      "effect": {
+        "type": "use",
+        "action": "cure_status",
+        "cures": ["poisoned", "acid_burn"],
+        "consumed_on_use": true
+      },
+      "value": 35
+    },
+    {
+      "id": "strength_potion",
+      "name": "Potion of Might",
+      "tier": 3,
+      "category": "consumable",
+      "tags": ["potion", "buff", "combat"],
+      "weight": 4,
+      "description": "An orange liquid in a flask that is warm to the touch before it is opened. It steams slightly in cold air. The smell is aggressive — pepper, copper, something that makes the sinuses tingle. Drinking it produces an immediate and notable effect: the hands feel stronger, the shoulders feel wider, and minor aches become temporarily nonexistent. This lasts for exactly three turns, then fades gradually with a mild headache.",
+      "flavor": "Three turns of heroism, bottled.",
+      "effect": {
+        "type": "use",
+        "action": "buff",
+        "stat": "damage",
+        "amount": 6,
+        "duration_turns": 3,
+        "consumed_on_use": true
+      },
+      "value": 80
+    },
+    {
+      "id": "invisibility_potion",
+      "name": "Potion of Shadow",
+      "tier": 4,
+      "category": "consumable",
+      "tags": ["potion", "buff", "stealth", "rare"],
+      "weight": 2,
+      "description": "Colorless and nearly tasteless — a faint sweetness, then nothing. The flask appears empty. After drinking, you look at your hand and find it translucent. After a moment, it disappears. You can still feel it. You are still there. The world can no longer confirm this. The effect lasts three turns or until you attack, whichever comes first.",
+      "flavor": "Being unseen is not the same as being safe.",
+      "effect": {
+        "type": "use",
+        "action": "buff",
+        "stat": "invisibility",
+        "duration_turns": 3,
+        "breaks_on_attack": true,
+        "consumed_on_use": true
+      },
+      "value": 200
+    },
+    {
+      "id": "torch",
+      "name": "Torch",
+      "tier": 1,
+      "category": "consumable",
+      "tags": ["light", "utility", "fire", "common"],
+      "weight": 12,
+      "description": "A three-foot length of hardwood wrapped at one end with linen soaked in pitch. The pitch end is already darkened from a previous use that was extinguished rather than spent. The wood is solid and dry. When lit, it burns steadily for forty minutes in still air and less in wind. It gives off a smell of burning pitch and a circle of orange light about fifteen feet across.",
+      "flavor": "Darkness is the dungeon's first weapon.",
+      "effect": {
+        "type": "use",
+        "action": "light_source",
+        "light_radius_feet": 15,
+        "duration_rooms": 10,
+        "extinguished_by": ["water", "strong_wind"],
+        "can_deal_fire_damage": true,
+        "fire_damage_if_used_as_weapon": 3
+      },
+      "value": 3
+    },
+    {
+      "id": "bomb_fire",
+      "name": "Fire Bomb",
+      "tier": 3,
+      "category": "consumable",
+      "tags": ["thrown", "fire", "aoe", "combat"],
+      "weight": 3,
+      "description": "A clay sphere four inches across, heavy with alchemical fire inside. The stopper is a wooden plug sealed with yellow wax. A fuse of braided cord runs from the stopper — burning length, approximately three seconds. The sphere is warm. It should be handled with care. It should especially not be dropped. When it breaks, the contents ignite on contact with air.",
+      "flavor": "Particularly effective against regenerating creatures. The troll problem has a solution.",
+      "effect": {
+        "type": "use",
+        "action": "throw",
+        "damage": 20,
+        "damage_type": "fire",
+        "aoe_radius_feet": 10,
+        "targets": "all_in_area",
+        "consumed_on_use": true
+      },
+      "value": 120
+    },
+    {
+      "id": "holy_water",
+      "name": "Holy Water",
+      "tier": 2,
+      "category": "consumable",
+      "tags": ["thrown", "holy", "undead", "consumable"],
+      "weight": 5,
+      "description": "A small glass vial sealed with wax bearing a sun-mark. The water inside looks ordinary but carries a charge — the vial is warmer than it should be, and near undead creatures, the water moves slightly, pressing against the glass toward the source of corruption. Blessed by a priest of the Order of the Unbroken Sun, now long-dissolved. The blessing has outlasted the Order. It will outlast you too.",
+      "flavor": "Faith leaves a lasting impression.",
+      "effect": {
+        "type": "use",
+        "action": "throw",
+        "damage": 25,
+        "damage_type": "holy",
+        "bonus_vs_tags": ["undead", "demon"],
+        "bonus_damage_vs": 10,
+        "consumed_on_use": true
+      },
+      "value": 45
+    },
+    {
+      "id": "remove_curse_scroll",
+      "name": "Scroll of Unmaking",
+      "tier": 3,
+      "category": "consumable",
+      "tags": ["scroll", "magic", "cure", "rare"],
+      "weight": 2,
+      "description": "A rolled parchment sealed in a copper tube that has gone green with age. The scroll inside is in excellent condition — the copper tube did its job. The text is in an old liturgical hand, dense and precise. Reading it takes ten seconds. The words seem to resist being read, like they're pulling away from comprehension even as you speak them. When finished, any curse currently affecting the reader unravels in a visible flash of pale light.",
+      "flavor": "Some bindings can be spoken undone. Someone took the time to write down how.",
+      "effect": {
+        "type": "use",
+        "action": "cure_status",
+        "cures": ["all_curses"],
+        "removes_cursed_items": true,
+        "consumed_on_use": true
+      },
+      "value": 180
+    },
+    {
+      "id": "cave_mushroom",
+      "name": "Cave Mushroom",
+      "tier": 1,
+      "category": "consumable",
+      "tags": ["food", "material", "common"],
+      "weight": 7,
+      "description": "A pale, wide-capped mushroom growing from a crack in the stone. It is luminescent in the way of deep-cave fungi — a faint blue-white light from the gills that is not enough to read by but enough to see your hand. The stem is firm and the cap rubbery. It smells of earth and mineral and very faintly of anise. It is edible. It tastes of nothing in particular. It does what food does.",
+      "flavor": "Probably fine. Probably.",
+      "effect": {
+        "type": "use",
+        "action": "heal",
+        "amount": 5,
+        "consumed_on_use": true
+      },
+      "value": 5
+    }
+  ],
+
+  "quest_and_special": [
+    {
+      "id": "protection_amulet",
+      "name": "Protection Amulet",
+      "tier": 3,
+      "category": "quest",
+      "tags": ["amulet", "magic", "defensive", "equipment"],
+      "weight": 2,
+      "description": "A gold disc the size of a large coin, set with a blue gemstone that is not sapphire — the color is too deep and shifts slightly in different lights. The reverse is engraved with concentric rings and a text too small to read without magnification. When touched, there is an immediate sensation of warmth that moves from the hand to the chest. When worn, it hums at a frequency that is felt rather than heard.",
+      "flavor": "It has protected someone before. It is ready to protect again.",
+      "effect": {
+        "type": "equip",
+        "slot": "neck",
+        "defense_bonus": 5,
+        "magic_resistance_bonus": 3,
+        "passive": "Reduces duration of all magical debuffs (curses, hexes, paralysis) by 1 turn."
+      },
+      "value": 180
+    },
+    {
+      "id": "ancient_signet_ring",
+      "name": "Royal Signet Ring",
+      "tier": 4,
+      "category": "quest",
+      "tags": ["ring", "magic", "key_item", "lore"],
+      "weight": 1,
+      "description": "A heavy gold ring, sized for a large hand. The face is set with a flat oval of black onyx engraved with a crest: a crown above a sealed vault, a serpent eating its own tail around the border. The gold has not tarnished. The onyx has not scratched. The ring is older than any building standing above ground. When held near the treasure vault door, the lock mechanism responds — faintly, like recognition.",
+      "flavor": "Authority survives the body. This ring still knows what it is.",
+      "effect": {
+        "type": "equip",
+        "slot": "ring",
+        "xp_multiplier": 1.1,
+        "passive": "The Treasure Vault door responds to this ring. Pressing it to the lock opens the vault without the Warden's Key.",
+        "quest_use": "Unlocks treasure_vault as an alternative to warden_key"
+      },
+      "value": 400
+    },
+    {
+      "id": "warden_key",
+      "name": "Warden's Key",
+      "tier": 3,
+      "category": "quest",
+      "tags": ["key", "quest_item"],
+      "weight": 1,
+      "description": "An iron key six inches long, the bow worked into the shape of a screaming face — the same face as the Crypt Warden's shield. The teeth are complex, cut for a mechanism that has no visible seams. The key is heavier than iron of this size should be. When held, a faint vibration travels up the hand, as if the lock it fits is nearby and aware.",
+      "flavor": "Keys accumulate purpose over time. This one has only ever had one.",
+      "effect": {
+        "type": "use",
+        "action": "unlock",
+        "target": "treasure_vault_door",
+        "consumed_on_use": false
+      },
+      "value": 50
+    },
+    {
+      "id": "spell_scroll_random",
+      "name": "Sealed Spell Scroll",
+      "tier": 3,
+      "category": "consumable",
+      "tags": ["scroll", "magic", "random"],
+      "weight": 3,
+      "description": "A scroll sealed in blue wax stamped with a symbol that could be a spell seal or could be decorative — you cannot tell which. The parchment inside has not been opened. The outer surface gives off a faint warmth. The spell inside is unknown until the scroll is opened and read. Opening it commits you: the magic activates on reading, whether you intended it or not.",
+      "flavor": "Sometimes the best strategy involves controlled uncertainty.",
+      "effect": {
+        "type": "use",
+        "action": "random_spell",
+        "possible_spells": [
+          { "id": "fireball", "name": "Fireball", "description": "30 fire damage in a 20-foot radius.", "chance": 0.2 },
+          { "id": "lightning_bolt", "name": "Lightning Bolt", "description": "35 lightning damage to a single target.", "chance": 0.2 },
+          { "id": "frost_nova", "name": "Frost Nova", "description": "All enemies in the room are frozen for 2 turns.", "chance": 0.15 },
+          { "id": "animate_dead", "name": "Animate Dead", "description": "One dead enemy in the room rises to fight for you for 5 turns.", "chance": 0.2 },
+          { "id": "blink", "name": "Blink", "description": "Instantly teleport to any room adjacent to your current room.", "chance": 0.15 },
+          { "id": "heal_major", "name": "Greater Healing", "description": "Restore 60 HP.", "chance": 0.1 }
+        ],
+        "consumed_on_use": true
+      },
+      "value": 120
+    },
+    {
+      "id": "lore_fragment",
+      "name": "Dungeon Record Fragment",
+      "tier": 1,
+      "category": "quest",
+      "tags": ["lore", "readable"],
+      "weight": 5,
+      "description": "A piece of parchment, stone tablet, or section of wall inscription — all variations are catalogued here as a single item type. The content varies: duty rosters, last wills, cryptic personal notes, theological arguments with no conclusion, orders from a king who may be the same king now on the throne. Each fragment is complete in itself. Together they form a larger picture.",
+      "flavor": "Someone needed this to be recorded. They were right to think it would matter later.",
+      "effect": {
+        "type": "use",
+        "action": "lore_reveal",
+        "xp_granted": 5
+      },
+      "value": 10
+    }
+  ],
+
+  "materials_and_currency": [
+    { "id": "copper_coin", "name": "Copper Coin", "tier": 1, "category": "currency", "tags": ["currency"], "weight": 15, "description": "A single copper coin, so worn the face is a smooth oval. Worth one gold.", "flavor": "The first currency is always the most honest.", "value": 1 },
+    { "id": "silver_coin_pouch", "name": "Pouch of Silver Coins", "tier": 2, "category": "currency", "tags": ["currency"], "weight": 8, "description": "A small leather pouch containing a handful of silver coins. The pouch is tied with a length of red cord. Worth thirty gold.", "flavor": "Silver lasts longer than the hands that carry it.", "value": 30 },
+    { "id": "gold_coin_pile", "name": "Gold Coins", "tier": 3, "category": "currency", "tags": ["currency", "loot"], "weight": 4, "description": "A scattered handful of gold coins — different sizes, different reigns, different kingdoms. All equally valuable now that those kingdoms are gone. Worth one hundred gold.", "flavor": "The last honest record of what a civilization thought it was worth.", "value": 100 },
+    { "id": "rat_pelt", "name": "Rat Pelt", "tier": 1, "category": "material", "tags": ["material", "junk"], "weight": 8, "description": "The pelt of a giant rat, scraped but not cured. The fur is dense despite the animal's condition. A tanner might take it. Worth two gold.", "flavor": null, "value": 2 },
+    { "id": "bone_fragment", "name": "Worked Bone Fragment", "tier": 1, "category": "material", "tags": ["material", "junk"], "weight": 8, "description": "A chunk of bone from something large, with marks suggesting it was being shaped into something before the work stopped. Worth one gold.", "flavor": null, "value": 1 },
+    { "id": "spider_venom_sac", "name": "Cave Spider Venom Sac", "tier": 2, "category": "material", "tags": ["material", "alchemy", "poison"], "weight": 5, "description": "An intact venom gland, carefully separated. It must be kept upright or the membrane tears. Milky-white inside. An alchemist will pay well for this. Worth twenty gold.", "flavor": "The most dangerous part of the spider, extracted.", "value": 20 },
+    { "id": "slime_gel", "name": "Acidic Slime Gel", "tier": 2, "category": "material", "tags": ["material", "alchemy", "acid"], "weight": 5, "description": "A sealed vial of gel scooped from a defeated Acidic Slime. Mildly corrosive — handle carefully. The gel eats through regular cork; this vial uses a glass stopper. Worth fifteen gold.", "flavor": "The dangerous part of the slime is all of it.", "value": 15 },
+    { "id": "ectoplasm", "name": "Ectoplasm", "tier": 3, "category": "material", "tags": ["material", "alchemy", "magic", "ghost"], "weight": 3, "description": "A sealed flask of pale, faintly luminous residue left by a destroyed wraith. It moves in the flask with a purpose that liquids don't usually have. Worth fifty gold to the right buyer.", "flavor": "The physical remainder of something that was not supposed to be physical.", "value": 50 },
+    { "id": "shadow_essence", "name": "Shadow Essence", "tier": 4, "category": "material", "tags": ["material", "alchemy", "magic", "shadow", "rare"], "weight": 2, "description": "A sealed glass vial containing what appears to be captured darkness. The darkness moves on its own, pressing against the glass in slow patterns. In full light, it absorbs light around it in a small radius. Worth one hundred fifty gold.", "flavor": "Shadow that has agreed to be contained, for now.", "value": 150 },
+    { "id": "troll_hide", "name": "Troll Hide", "tier": 3, "category": "material", "tags": ["material", "armor_craft"], "weight": 3, "description": "A section of cave troll hide, already trying to regenerate despite being severed. The edges are knitting themselves together. If processed quickly, the hide makes excellent armor leather — dense and self-repairing if treated correctly. Worth sixty gold.", "flavor": "Work quickly. It will heal around you if you're not careful.", "value": 60 },
+    { "id": "gargoyle_horn", "name": "Gargoyle Horn", "tier": 3, "category": "material", "tags": ["material", "trophy", "stone"], "weight": 2, "description": "A six-inch stone horn broken cleanly from a gargoyle's skull. The stone is dense and slightly warm. Carved, it makes excellent arrowheads or a passable weapon pommel. Worth forty-five gold.", "flavor": "A trophy from something that was stone, briefly became something else, and is stone again.", "value": 45 },
+    { "id": "ghoul_claw", "name": "Ghoul Claw", "tier": 2, "category": "material", "tags": ["material", "trophy", "alchemy", "poison"], "weight": 4, "description": "A curved ghoul claw three inches long, dark as old bone. The hollow interior still carries traces of the paralytic agent. An alchemist can extract it. Worth eighteen gold.", "flavor": "The source of one of its most unpleasant abilities, made safe only by separation from its owner.", "value": 18 },
+    { "id": "arcane_focus_cracked", "name": "Cracked Arcane Focus", "tier": 2, "category": "material", "tags": ["material", "magic", "craft"], "weight": 3, "description": "A crystal sphere three inches across, cracked from one side to the other. The crack is filled with hardened light — the energy sealed inside when the crack formed. It crackles faintly when held. A competent artificer could repair it. Worth thirty-five gold, or double if repaired.", "flavor": "The crack is where the magic is trying to escape.", "value": 35 }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "_meta": {
+    "file": "traps.json",
+    "description": "All trap definitions. Each trap has a full visual description, detection and disarm procedures, trigger mechanics, and effect. Traps placed by rooms.json via possible_events.",
+    "fields": {
+      "id": "Unique trap identifier",
+      "name": "Display name",
+      "tier": "1–5 danger tier",
+      "tags": "Used by room filtering",
+      "weight": "Spawn probability weight",
+      "visible_hint": "What, if anything, the player can see before the trap triggers — what a perceptive player might notice",
+      "on_detect": "Text shown to the player when the trap is successfully detected",
+      "on_trigger": "Text shown when the trap fires",
+      "on_disarm_success": "Text shown when the trap is successfully disarmed",
+      "on_disarm_fail": "Text shown when disarm fails — may or may not trigger the trap",
+      "detection_dc": "Difficulty class for Perception check to notice the trap",
+      "disarm_dc": "Difficulty class for Dexterity check to disarm",
+      "disarm_fail_triggers": "Whether a failed disarm attempt triggers the trap",
+      "trigger_condition": "What causes the trap to fire",
+      "effect": "Mechanical effect when triggered"
+    }
+  },
+  "traps": [
+    {
+      "id": "trap_dart",
+      "name": "Dart Trap",
+      "tier": 1,
+      "tags": ["pressure_plate", "ranged", "poison", "corridor"],
+      "weight": 10,
+      "visible_hint": "The flagstone looks right, but the grout around it is newer than the surrounding stones — a slightly different color, more carefully finished. Slots in the wall at knee height are easily missed.",
+      "on_detect": "You spot a pressure plate — a single flagstone with fresh grout at its edges. Slots in the wall on both sides align with it. Something inside is loaded and waiting.",
+      "on_trigger": "Your foot finds the plate before your eyes do. Two sharp sounds from the wall — and two darts are in you before you've processed the noise. The pain follows a second behind.",
+      "on_disarm_success": "You lever the plate up carefully and find the spring mechanism underneath. Disconnecting the trigger wire takes thirty seconds of focused work. The mechanism clicks off, inert.",
+      "on_disarm_fail": "The wire catches on the tool wrong. A dart fires before you can pull back — one instead of two, but still.",
+      "detection_dc": 10,
+      "disarm_dc": 12,
+      "disarm_fail_triggers": "partial",
+      "trigger_condition": "pressure_plate_stepped_on",
+      "effect": {
+        "damage": 8,
+        "damage_type": "piercing",
+        "hits": 2,
+        "status": {
+          "effect": "poisoned",
+          "chance": 0.25,
+          "damage_per_turn": 2,
+          "duration_turns": 3
+        }
+      }
+    },
+    {
+      "id": "trap_swinging_blade",
+      "name": "Pendulum Blade",
+      "tier": 2,
+      "tags": ["tripwire", "mechanical", "corridor", "slashing"],
+      "weight": 6,
+      "visible_hint": "At ankle height, spanning the corridor, a thread of wire catches the torchlight for exactly one second when the angle is right. Above the doorframe, a weighted arm is folded against the ceiling in shadow.",
+      "on_detect": "A wire at ankle height. Above it, mounted in the ceiling: a pendulum arm with a weighted blade, folded back and under tension. It swings the full width of the corridor. Whoever built this maintained it carefully.",
+      "on_trigger": "Something catches your foot. Above you, the arm releases. The blade is moving before you can think about it, and it takes you across the torso as it swings.",
+      "on_disarm_success": "You trace the wire to its anchor, a small iron hook in the baseboard. Unhooking it releases the tension without triggering the arm. The blade descends slowly, under control, and stops at mid-height — harmless.",
+      "on_disarm_fail": "The wire slips and the arm releases. You get a half-second warning from the sound of the mechanism. Not enough to fully avoid it.",
+      "detection_dc": 13,
+      "disarm_dc": 15,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "tripwire_tripped",
+      "effect": {
+        "damage": 18,
+        "damage_type": "slashing",
+        "hits": 1,
+        "note": "On failed disarm, player may attempt Agility DC 13 to halve damage"
+      }
+    },
+    {
+      "id": "trap_pressure_plate",
+      "name": "Pressure Plate Pit",
+      "tier": 2,
+      "tags": ["pressure_plate", "floor", "fall", "common"],
+      "weight": 6,
+      "visible_hint": "A section of floor that sounds hollow when tapped — a dull resonance rather than the flat thud of solid stone. The edges of the section are very slightly raised on the near side.",
+      "on_detect": "A pressure plate, large — four feet across. Below it, hollow space. The edge near you is hinged. Whatever is below the plate has been active recently: fresh scratch marks on the stone around the edge.",
+      "on_trigger": "The floor gives. Not gradually — immediately. The hinge releases and the section drops inward and you drop with it, into the dark, before any reaction is possible.",
+      "on_disarm_success": "A wedge driven into the hinge mechanism locks the plate in place. Simple, effective. The plate won't move until someone removes the wedge.",
+      "on_disarm_fail": "The wedge slips and the plate drops. You catch the edge on the way down — Strength DC 12 to haul yourself back up or drop the full distance.",
+      "detection_dc": 12,
+      "disarm_dc": 10,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "pressure_plate_stepped_on",
+      "effect": {
+        "damage": 15,
+        "damage_type": "fall",
+        "secondary": {
+          "effect": "relocated",
+          "destination": "pit_sub_level",
+          "description": "Player lands in the sub-level below, separated from the current floor. Must find stairs or alternate route back."
+        }
+      }
+    },
+    {
+      "id": "trap_volatile_flask",
+      "name": "Volatile Flask Trap",
+      "tier": 2,
+      "tags": ["tripwire", "alchemical", "fire", "aoe"],
+      "weight": 5,
+      "visible_hint": "A flask suspended from the ceiling by a wire, positioned over a walkway. The liquid inside is pale orange and reacts visibly to movement nearby — small ripples, oriented toward you. The wire runs to a small clasp at the door frame.",
+      "on_detect": "An alchemical flask suspended by wire over the exact center of the walkway. The liquid inside is an incendiary compound — you recognize the color. If the wire is tripped, the flask falls and breaks. Everything within ten feet burns.",
+      "on_trigger": "Something catches the wire. The flask drops. It breaks. The compound ignites on air contact and the room is suddenly very bright and very hot.",
+      "on_disarm_success": "You release the clasp holding the wire taut, then lower the flask carefully by the wire until it rests on the floor. Capped and intact, it's actually useful.",
+      "on_disarm_fail": "The clasp releases wrong — the wire goes taut, then snaps. The flask drops.",
+      "detection_dc": 11,
+      "disarm_dc": 13,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "tripwire_tripped",
+      "effect": {
+        "damage": 15,
+        "damage_type": "fire",
+        "aoe_radius_feet": 10,
+        "targets": "all_in_area",
+        "note": "On successful disarm, flask becomes a bomb_fire item in inventory"
+      }
+    },
+    {
+      "id": "trap_poison_gas",
+      "name": "Gas Vent Trap",
+      "tier": 3,
+      "tags": ["pressure_plate", "poison", "aoe", "room"],
+      "weight": 5,
+      "visible_hint": "Yellowing of the stone around floor-level vents that would be easy to miss as mineral staining. The room smells very slightly of something chemical that you almost identify before it fades. The pressure plate here is well-disguised — same stone, same grout — but the section in front of the vents is slightly proud of the surrounding floor.",
+      "on_detect": "Floor vents distributed around the room's perimeter, barely visible. The discoloration around them is chemical, not mineral. A pressure plate in the room's center connects to them — when depressed, the vents open. The gas is colorless and takes effect quickly.",
+      "on_trigger": "A soft mechanical sound underfoot. The vents exhale a faintly yellowed mist that disperses quickly into the room. The smell is wrong in a way that the body recognizes before the mind does.",
+      "on_disarm_success": "You find the plate and block it with a stone wedge. You also find the gas reservoir valve behind a wall panel and close it. The room won't vent now even if the plate is triggered.",
+      "on_disarm_fail": "The reservoir valve is more complex than it appeared. It activates while you're working on it.",
+      "detection_dc": 14,
+      "disarm_dc": 16,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "pressure_plate_stepped_on",
+      "effect": {
+        "damage_type": "poison",
+        "aoe_radius_feet": 30,
+        "targets": "all_in_room",
+        "status": {
+          "effect": "poisoned",
+          "damage_per_turn": 5,
+          "duration_turns": 4
+        },
+        "note": "Gas fills the room; lingering in the room continues poison exposure"
+      }
+    },
+    {
+      "id": "trap_collapse_ceiling",
+      "name": "Collapse Trap",
+      "tier": 3,
+      "tags": ["tripwire", "structural", "aoe", "heavy"],
+      "weight": 3,
+      "visible_hint": "The ceiling here looks wrong — the stones are not mortared but balanced, stacked without adhesive over a wide section. Support struts hold them up. The struts are connected to something at floor level by a barely-visible cord.",
+      "on_detect": "Balanced ceiling stones — not mortared, sitting on support struts connected to a tripwire. Pull or trip the wire and the struts collapse inward. The ceiling section drops. The area affected is roughly twenty feet across. There is not a safe way to sprint through this without addressing it.",
+      "on_trigger": "The wire catches on your boot. A sound like something releasing — then the ceiling comes down. Dust first. Then stone.",
+      "on_disarm_success": "You find each strut connection and prop them with rubble from the floor. The wire can now be tripped without effect — the struts are supported independently. The ceiling stays up.",
+      "on_disarm_fail": "The prop slips. The strut goes. The stones shift — not all of them, but enough. Get out of the area.",
+      "detection_dc": 15,
+      "disarm_dc": 18,
+      "disarm_fail_triggers": "partial",
+      "trigger_condition": "tripwire_tripped",
+      "effect": {
+        "damage": 30,
+        "damage_type": "bludgeoning",
+        "aoe_radius_feet": 20,
+        "targets": "all_in_area",
+        "secondary": {
+          "effect": "exit_blocked",
+          "chance": 0.5,
+          "description": "Rubble blocks one random exit from this room. Clearing it requires 10 minutes and a Strength check DC 12."
+        }
+      }
+    },
+    {
+      "id": "trap_rune_glyph",
+      "name": "Arcane Rune",
+      "tier": 4,
+      "tags": ["magic", "floor", "area"],
+      "weight": 3,
+      "visible_hint": "A circular marking on the floor, roughly eighteen inches across, carved with precision into the stone. It glows faintly — not bright enough to be obvious from the doorway, but visible when you're close to it. Each rune is different. This one could be anything.",
+      "on_detect": "A magic rune, active. The glyph pattern indicates a triggered effect — not a continuous one. It fires when stepped on. What it does depends on the specific configuration; this one could be any of several things. The safe options are to go around it, or disarm it. Going around requires pressing against the wall — the rune is at the center of the natural walking path.",
+      "on_trigger": "Your foot lands on the rune. The glyph flares white-gold and the effect activates instantly, before any reaction is possible.",
+      "on_disarm_success": "You trace the glyph's outer ring and disrupt the circuit at its weakest point — a single line, visible only with close examination, that carries the activation charge. Severing it with a blade or tool causes the whole glyph to dim and go dark.",
+      "on_disarm_fail": "The disruption point is not where you thought. The charge flows through the alternate path and the glyph fires.",
+      "detection_dc": 14,
+      "disarm_dc": 18,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "step_on_glyph",
+      "effect": {
+        "type": "random",
+        "roll": "1d6",
+        "outcomes": [
+          { "roll": 1, "effect": "teleport_random_room", "description": "Player is instantly teleported to a random room in the dungeon." },
+          { "roll": 2, "effect": "summon_enemies", "description": "Two Skeleton Warriors animate from the walls." },
+          { "roll": 3, "effect": "damage_magic", "damage": 25, "damage_type": "necrotic", "description": "Dark energy discharges into the player for 25 necrotic damage." },
+          { "roll": 4, "effect": "max_hp_drain", "amount": 10, "description": "The rune drains vitality. Player's maximum HP is reduced by 10 until they rest." },
+          { "roll": 5, "effect": "confuse", "duration_turns": 3, "description": "Player is confused for 3 turns — movement directions are randomized." },
+          { "roll": 6, "effect": "blessing", "description": "Unexpectedly benign: Player is healed 25 HP and gains +2 to all checks for 5 turns." }
+        ]
+      }
+    },
+    {
+      "id": "trap_sarcophagus_trap",
+      "name": "False Sarcophagus",
+      "tier": 3,
+      "tags": ["crypt", "melee", "undead", "ambush"],
+      "weight": 4,
+      "visible_hint": "One sarcophagus among many, but its lid is sealed too well — no weathering at the seam, no lichen growth, no discoloration from moisture. The stone is also slightly lighter in color than its neighbors, as if it's newer.",
+      "on_detect": "This sarcophagus has been recently sealed. The stone is newer than the others. Whatever is inside is recent — not an ancient burial. You can hear, if you press your ear to it, the faint sound of something shifting inside.",
+      "on_trigger": "You walk past without checking. The lid explodes outward. Something pale and fast is already reaching for you before you can turn.",
+      "on_disarm_success": "You brace the lid before opening it, then open it quickly, controlling the threshold. Inside: a Ghoul, bound with a cord that was just barely holding. You deal with it before it fully extracts itself from the sarcophagus — it takes half damage from your attack and has no initiative.",
+      "on_disarm_fail": "The lid resists longer than expected, then gives all at once. You lose your grip and it flies. The Ghoul is out.",
+      "detection_dc": 13,
+      "disarm_dc": 12,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "walking_past_without_checking",
+      "effect": {
+        "type": "spawn_enemy",
+        "enemy_id": "ghoul",
+        "combat_modifier": "enemy_gets_first_action",
+        "note": "On successful detect-and-disarm: Ghoul spawns at half HP with no first-action advantage"
+      }
+    },
+    {
+      "id": "trap_rope_bridge",
+      "name": "Weakened Rope Bridge",
+      "tier": 3,
+      "tags": ["structural", "agility", "pit_room"],
+      "weight": 4,
+      "visible_hint": "The bridge planks are old and some are missing entirely. The ropes look intact from the near side but closer examination reveals two of the four main load-bearing ropes are frayed through to their last few threads.",
+      "on_detect": "Two of the four ropes are nearly severed — not from age, from something that cut them partway through and stopped. The bridge would probably hold a light load. It will not hold a person in armor and pack. Crossing requires either repairing it or accepting the risk.",
+      "on_trigger": "You're three steps from the far side when the frayed rope gives. The bridge tilts. The remaining planks slide. You have about one second.",
+      "on_disarm_success": "You find rope in your pack or nearby and splice the cut sections. The repair is not elegant but the bridge will hold. Crossing is safe.",
+      "on_disarm_fail": "The splice doesn't hold weight. You discover this when you're on the bridge.",
+      "detection_dc": 12,
+      "disarm_dc": 11,
+      "disarm_fail_triggers": true,
+      "trigger_condition": "crossing_bridge",
+      "effect": {
+        "primary": {
+          "type": "agility_check",
+          "dc": 13,
+          "on_success": "Player grabs the remaining rope and swings to the far side. 5 damage from impact.",
+          "on_fail": "Player falls into the pit. 15 fall damage. Lands in sub-level."
+        }
+      }
+    }
+  ]
+}

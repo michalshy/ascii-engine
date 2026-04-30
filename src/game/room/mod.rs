@@ -33,7 +33,5 @@ pub struct Room {
     pub pos: Coords,
     pub description: String,
     pub connections: Vec<String>,
-    pub discovered: bool,
-    pub visible: bool,
     event: Event,
 }

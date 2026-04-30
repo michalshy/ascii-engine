@@ -1,0 +1,425 @@
+{
+  "_meta": {
+    "file": "npcs.json",
+    "description": "All NPC definitions. Each NPC has a physical description, full dialogue lines, optional shop inventory, and quest involvement. NPCs placed by rooms.json via possible_events.",
+    "fields": {
+      "id": "Unique NPC identifier",
+      "name": "Display name",
+      "tier": "Dungeon depth tier — controls which rooms this NPC can appear in",
+      "tags": "Used for filtering and room assignment",
+      "weight": "Spawn probability weight",
+      "archetype": "NPC behavioral class",
+      "hostile": "false | true | conditional",
+      "description": "Physical description shown on first encounter",
+      "on_first_meet": "Text shown when the player enters the room and the NPC is present",
+      "on_revisit": "Text shown on subsequent visits",
+      "on_leave": "Text shown when the player leaves without resolving the NPC",
+      "dialogue": "Labelled dialogue options and responses",
+      "shop": "If present, NPC sells items — references items.json IDs",
+      "gives_item": "Item ID the NPC gives freely under specified conditions",
+      "quest_id": "References quests.json if this NPC starts or advances a quest"
+    }
+  },
+  "npcs": [
+    {
+      "id": "npc_old_guardian",
+      "name": "Old Guardian",
+      "tier": 1,
+      "tags": ["entrance", "story", "warning", "unique"],
+      "weight": 3,
+      "archetype": "gatekeeper",
+      "hostile": false,
+      "description": "A figure in armor so old it has become part of the body — breastplate rusted to the gambeson beneath, greaves fused to boots by decades of damp. The face is visible: very old, very weathered, very still. Not peaceful. Still. The eyes are open and tracking. One hand rests on a halberd that has not been raised in years but would be, if required.",
+      "on_first_meet": "The figure at the gate does not step aside. It watches you approach without urgency, without alarm — the way something watches an event it has already decided the outcome of.",
+      "on_revisit": "The Old Guardian does not look at you as you pass. It is looking at the gate.",
+      "on_leave": "The Guardian does not turn as you go. 'Same as all the others,' it says to no one.",
+      "dialogue": {
+        "greeting": "Turn back while you still can. This place is not for the living.",
+        "options": [
+          {
+            "id": "ask_whats_inside",
+            "player": "What's down there?",
+            "response": "A king who should have died three hundred years ago. Rooms full of things that used to be soldiers. And a vault that the king cannot reach without a key he lost and is very interested in finding. That is a simplified account."
+          },
+          {
+            "id": "ask_who_are_you",
+            "player": "Who are you?",
+            "response": "I was posted here. I have not been relieved. That is all that is relevant."
+          },
+          {
+            "id": "ask_about_key",
+            "player": "What key?",
+            "response": "The Warden carries it. The Warden is in the crypt. I would advise against attempting to take it, but I am clearly not going to be listened to."
+          },
+          {
+            "id": "ask_about_escaping",
+            "player": "Can you leave?",
+            "response": "No. I have considered it. The answer is no. Go — if you're going. Standing here changes nothing."
+          },
+          {
+            "id": "press_to_come",
+            "player": "Come with me.",
+            "response": "I am the gate. The gate does not come with you. It stays. You go, or you turn back. Those are the options."
+          }
+        ]
+      },
+      "gives_item": null,
+      "quest_id": "quest_undead_king"
+    },
+    {
+      "id": "npc_wandering_pilgrim",
+      "name": "Wandering Pilgrim",
+      "tier": 2,
+      "tags": ["helpful", "item_giver", "lore"],
+      "weight": 5,
+      "archetype": "survivor",
+      "hostile": false,
+      "description": "A person in a traveler's cloak too heavy for indoors, carrying a staff with a cloth bundle tied to the top. The face is gaunt and the eyes are tired in the specific way of someone who has not slept in a place that allows for it. A bruise across the left cheekbone is yellowing. The pilgrim badges on the cloak come from half a dozen different shrines, some of which you recognize and some you do not.",
+      "on_first_meet": "Someone is sitting with their back against the well, eating from a cloth-wrapped ration with the determined focus of someone who has decided that eating is the most important thing happening right now. They look up when they hear you.",
+      "on_revisit": "The pilgrim nods when you return. 'Still alive then. Good.'",
+      "on_leave": "'Watch the crypt,' the pilgrim calls after you. 'The lids on the east side are looser than they look.'",
+      "dialogue": {
+        "greeting": "Oh — a living face. I'd started to wonder. Sit, if you need a moment. The well is safer than it looks if you don't drink from it.",
+        "options": [
+          {
+            "id": "ask_how_far",
+            "player": "How far have you gone?",
+            "response": "Far enough. The throne room — I made it to the door. Saw what's inside through the gap at the bottom. The light from the crown. I didn't open it. I'm... taking a different route out."
+          },
+          {
+            "id": "ask_treasure",
+            "player": "Have you seen the vault?",
+            "response": "I've seen the door. Iron — enormous. Whatever's inside the king wants badly, and he can't get to it. Which means it's worth wanting. The key is with the Warden in the crypt. Or there's a ring, somewhere, that works instead — a ghost soldier told me that, make of it what you will."
+          },
+          {
+            "id": "ask_for_help",
+            "player": "Can you help me?",
+            "response": "Not the way you mean. But take this — I've had it since the library and it's done me no good, since I'm not going further. You look like someone who'll use it.",
+            "triggers": "give_item"
+          },
+          {
+            "id": "ask_shrine",
+            "player": "Is there a shrine down here?",
+            "response": "Yes. Small alcove, west side of the dungeon, accessible from the corridor between the library and the well. I prayed there. I felt better. I'd go back, but — well. I'm going this way instead."
+          },
+          {
+            "id": "ask_worst",
+            "player": "What's the worst thing in there?",
+            "response": "The wraith. Pale. Translucent. Hands. Fire hurts it — I learned that the expensive way. Holy water works better. Silver works. Normal blades just... pass through."
+          }
+        ]
+      },
+      "gives_item": {
+        "item_id": "health_potion_standard",
+        "condition": "player_asks_for_help",
+        "description": "Hands over a health potion from the pack, with a small shrug that means 'I need you to make use of this.'"
+      },
+      "quest_id": "quest_undead_king"
+    },
+    {
+      "id": "npc_mad_scholar",
+      "name": "Mad Scholar",
+      "tier": 2,
+      "tags": ["knowledge", "library", "unpredictable"],
+      "weight": 3,
+      "archetype": "eccentric",
+      "hostile": false,
+      "description": "A person who was once a scholar and is now something the scholarship has done to them. Ink-stained to the elbows. Hair in every direction. Three pairs of spectacles — two worn, one in a coat pocket. The coat pocket is torn. Notes are pinned to everything: the coat, the sleeve, the back of one hand in faded ink. Moving around this person requires navigating scattered pages that must not be stepped on.",
+      "on_first_meet": "The figure doesn't look up. 'I know, I know — but the rune configuration in section four directly contradicts the Aldenmere hypothesis and someone has to address this. It won't be addressed by itself.' A pause. 'Who are you?'",
+      "on_revisit": "'You came back. Interesting. Most people go one way or the other. Not back.'",
+      "on_leave": "'The necromantic binding on the king — the source is the crown! Write that down! Write it DOWN.'",
+      "dialogue": {
+        "greeting": "Yes? Yes, yes — I'm working. What do you need? I'm on the edge of something and I cannot — what?",
+        "options": [
+          {
+            "id": "ask_about_king",
+            "player": "Tell me about the Undead King.",
+            "response": "The king didn't become undead naturally. Someone did this to him — a court mage, by my reconstruction, acting on orders from outside. The binding is in the crown. Destroy the crown, you sever the binding. The king won't survive without it. Probably. I'm seventy percent confident in that. Sixty. There's been some margin creep."
+          },
+          {
+            "id": "ask_about_runes",
+            "player": "What do the runes on the gate mean?",
+            "response": "They're a warning, a dedication, and a contract, in that order. The warning is obvious — do not enter, danger, et cetera. The dedication names the original purpose of the dungeon as a vault and burial complex. The contract is more interesting: someone agreed to something, in exchange for something, with someone who is referred to only as 'the permanence.' I haven't found what was exchanged."
+          },
+          {
+            "id": "ask_about_undead",
+            "player": "How do I fight the undead here?",
+            "response": "Blunt weapons for skeletons — the animation relies on the structural integrity of the frame. Fire for zombies and ghouls — disrupts the necromantic binding faster than anything else. The wraith is special. It's partially non-corporeal: only silver, fire, or holy energy registers. And the Crypt Warden — blunt and holy, and don't let it hit you. Just don't. I mean this seriously."
+          },
+          {
+            "id": "ask_about_scroll",
+            "player": "What are you working on?",
+            "response": "A translation and cross-reference of every inscription in this dungeon. I've been here — some time. The patterns are fascinating. Here — take this scroll I've already copied. Maybe it'll be more useful to you than sitting in my pile.",
+            "triggers": "give_item"
+          },
+          {
+            "id": "ask_how_long",
+            "player": "How long have you been down here?",
+            "response": "I... the candles. I've been through — quite a number of candles. The months become difficult to track. I have enough to eat — the mushrooms, mostly. I have enough to drink from the east cistern, not the main well, don't drink from the main well. I'm fine. The work is important. Someone has to do it."
+          }
+        ]
+      },
+      "gives_item": {
+        "item_id": "spell_scroll_random",
+        "condition": "player_asks_about_work",
+        "description": "Produces a scroll from an enormous pile and holds it out without looking up, already back to writing."
+      },
+      "quest_id": "quest_undead_king"
+    },
+    {
+      "id": "npc_trapped_merchant",
+      "name": "Trapped Merchant",
+      "tier": 2,
+      "tags": ["shop", "helpful", "trade"],
+      "weight": 3,
+      "archetype": "merchant",
+      "hostile": false,
+      "description": "A person of trade — well-dressed for the situation, which makes the situation more absurd. A large pack leans against the wall behind them. The visible goods are organized despite the circumstances. The merchant has barricaded the door with a workbench and is sitting on the far side of it, conducting inventory with the focused calm of someone who has decided that productivity is the only sane response to immediate danger.",
+      "on_first_meet": "The barricade shifts. An eye appears at the gap. 'Alive. That's — good. Are you alone? Do you have weapons? How many things did you pass on the way here?'",
+      "on_revisit": "'You again. Good. Still here. Still alive. Still selling.'",
+      "on_leave": "'Come back when you have coin, or gold, or something worth trading. I'm not going anywhere.'",
+      "dialogue": {
+        "greeting": "Right. You're alive, you have a weapon, and you look like you've been in worse situations than this — or at least different ones. I have supplies. You clearly need supplies. Let's discuss terms.",
+        "options": [
+          {
+            "id": "ask_shop",
+            "player": "What are you selling?",
+            "response": "Potions, torches, the occasional scroll. I got turned around in the upper section and have been here long enough to wish I'd packed more. Prices are reasonable, considering. What do you need?",
+            "triggers": "open_shop"
+          },
+          {
+            "id": "ask_how_got_here",
+            "player": "How did you end up down here?",
+            "response": "Wrong door. Literally — there's a door on the upper level that connects to a passage that connects to a stairwell that I thought was a storage area. It wasn't. I've been mapping my way back ever since. The map I have of this section is surprisingly accurate, if you want it — at a price."
+          },
+          {
+            "id": "ask_about_map",
+            "player": "You have a map?",
+            "response": "Partial. Upper two tiers, mostly accurate except for one room I couldn't enter — something that looked like armor kept moving toward the door when I approached. I'd say the map is worth twenty gold, but I'm open to barter. What've you got?",
+            "triggers": "map_trade_option"
+          },
+          {
+            "id": "offer_escort",
+            "player": "I'll help you get out.",
+            "response": "That's — very direct. All right. If you clear the passage back to the entrance and come back for me, I'll give you your pick of anything left in the pack. Not everything, but whatever you want most. Deal?",
+            "triggers": "start_quest_escort"
+          }
+        ]
+      },
+      "shop": {
+        "description": "The merchant's pack, organized by type. Prices are marked in chalk on small slates.",
+        "stock": [
+          { "item_id": "health_potion_minor", "quantity": 3, "price": 30 },
+          { "item_id": "health_potion_standard", "quantity": 2, "price": 75 },
+          { "item_id": "antidote", "quantity": 3, "price": 45 },
+          { "item_id": "torch", "quantity": 6, "price": 5 },
+          { "item_id": "holy_water", "quantity": 2, "price": 60 },
+          { "item_id": "bomb_fire", "quantity": 1, "price": 150 },
+          { "item_id": "leather_vest", "quantity": 1, "price": 25 },
+          { "item_id": "rusty_sword", "quantity": 1, "price": 10 }
+        ],
+        "buys": true,
+        "buy_rate": 0.5
+      },
+      "gives_item": {
+        "item_id": "arcane_focus_cracked",
+        "condition": "quest_escort_completed",
+        "description": "'Picked this up on the way down. Don't have a use for it, and you've earned something better than coin.'"
+      },
+      "quest_id": "quest_merchant_escort"
+    },
+    {
+      "id": "npc_ghost_soldier",
+      "name": "Ghost Soldier",
+      "tier": 3,
+      "tags": ["undead", "non_hostile", "lore"],
+      "weight": 4,
+      "archetype": "lingering_dead",
+      "hostile": false,
+      "description": "A translucent figure in armor that is correct for three hundred years ago — the silhouette of someone mid-service, mid-patrol, mid-existence. The face is visible but slightly wrong: too still, too composed, the eyes not quite tracking. The figure is not walking but is not standing still either; it drifts in a slow loop around the room's perimeter, arriving at the same point and repeating, as if the route is the only thing it has left.",
+      "on_first_meet": "The figure completes its circuit and pauses where you are standing. It looks at you — through you — and then something changes in the expression, and it looks at you instead of through you.",
+      "on_revisit": "The ghost completes its circuit. It pauses at you again, briefer this time, and continues.",
+      "on_leave": "'End it,' it says. 'Please. End it and let us go.'",
+      "dialogue": {
+        "greeting": "Still on duty. The king has not dismissed the guard. Until he does — or until he is beyond dismissing anyone — we remain.",
+        "options": [
+          {
+            "id": "ask_how_long",
+            "player": "How long have you been here?",
+            "response": "Since the binding. He died, and then he did not stay dead, and then we did not stay dead either. The crown keeps us. What the crown does to him, it does to us also."
+          },
+          {
+            "id": "ask_about_vault",
+            "player": "What's in the vault?",
+            "response": "The treasury. The records. The things he valued enough to protect with a door that he himself cannot open. He cannot open it — the vault's lock will only respond to the Ring or the Warden's Key. He does not have either. He has been looking for both since the binding."
+          },
+          {
+            "id": "ask_about_ring",
+            "player": "Where is the ring?",
+            "response": "The Oracle has it. It has always had it. The Oracle is in the secret places of the dungeon — I cannot tell you where because I cannot leave my circuit to show you, but you will find it if you find the rooms that are not on any map."
+          },
+          {
+            "id": "ask_how_to_kill_king",
+            "player": "How do I kill the king?",
+            "response": "The crown. The crown is the binding. Destroy it. We have tried. We cannot destroy what we are part of. An outsider — someone not bound to this place — could. Holy fire is most effective. Or enough force of any kind on the crown itself once the king is sufficiently weakened."
+          },
+          {
+            "id": "ask_what_will_happen",
+            "player": "What happens to you if the king dies?",
+            "response": "We stop. The binding releases and we stop. I would find this very welcome. I have been doing this circuit for three hundred years. I am very tired."
+          }
+        ]
+      },
+      "gives_item": null,
+      "quest_id": "quest_undead_king"
+    },
+    {
+      "id": "npc_rival_adventurer",
+      "name": "Rival Adventurer",
+      "tier": 3,
+      "tags": ["human", "rival", "neutral"],
+      "weight": 2,
+      "archetype": "rival",
+      "hostile": "conditional",
+      "hostile_condition": {
+        "trigger": "player_has_item",
+        "item_id": "warden_key",
+        "dialogue_shift": "That key. I've been looking for that key for days. Hand it over and we walk away clean."
+      },
+      "description": "Better-equipped than you'd like for your purposes: good boots, a sword that has been maintained rather than found, a pack that is full and organized. The bearing is professional — no wasted movement, hands in known positions. This person has done this before. They are doing it now. You are a variable in their plan that they are rapidly assessing.",
+      "on_first_meet": "A figure at the far end of the corridor freezes when they hear you, then continues moving — casual, deliberate. They look at your gear, then your face, then your gear again.",
+      "on_revisit": "'You're still alive. Good for you. Where've you been?'",
+      "on_leave": "'Stay out of the armory — I've cleared it, but something's working its way back in from the passage behind the rack. Your problem if you go back there.'",
+      "dialogue": {
+        "greeting": "Didn't expect company. You look like competition, and I'd rather you weren't. Let's establish terms.",
+        "options": [
+          {
+            "id": "ask_terms",
+            "player": "What terms?",
+            "response": "Stay out of rooms I've already cleared, I'll stay out of yours. We both want the vault — I'll be honest about that. But the dungeon's bigger than one person's reach. We can divide it or fight about it. Fighting wastes time."
+          },
+          {
+            "id": "offer_alliance",
+            "player": "We should work together.",
+            "response": "Considered it. The math works out: you've seen the upper section, I've scouted the middle. Combined information is worth more than half the vault. Temporary alliance. Dissolves at the vault door. We each take what we carry out.",
+            "triggers": "alliance_formed"
+          },
+          {
+            "id": "ask_what_found",
+            "player": "What have you found so far?",
+            "response": "Armory's cleared — nothing worth taking but I mapped the connections. The library has someone living in it — small, harmless, extremely strange. The crypt has three things I'd rather not go back to. And there's a room with a circle on the floor that I walked into once and immediately walked out of. Whatever that is, it's yours if you want it."
+          },
+          {
+            "id": "ask_map_trade",
+            "player": "Trade maps?",
+            "response": "Fair. Show me yours and I'll show you mine. What have you covered?",
+            "triggers": "map_exchange"
+          },
+          {
+            "id": "threaten",
+            "player": "Get out of my way.",
+            "response": "I could. I'm also not in your way at the moment, so I'm not sure what you want from this conversation. Think before you escalate. We've both got swords and this corridor is narrow."
+          }
+        ]
+      },
+      "gives_item": null,
+      "quest_id": "quest_rival_alliance"
+    },
+    {
+      "id": "npc_dungeon_oracle",
+      "name": "The Oracle",
+      "tier": 4,
+      "tags": ["magic", "knowledge", "unique", "story"],
+      "weight": 1,
+      "archetype": "oracle",
+      "hostile": false,
+      "description": "Seated in a chair of stone in the center of the secret chamber, robed in grey that does not quite resolve into a specific shade. The robes move without wind in slow, deliberate patterns. The face is inside the hood. The hood is full of darkness that is deeper than the room's lighting can account for. The hands resting on the chair's arms are visible: human in proportion, very still, and very, very old. The Oracle does not breathe, as far as can be observed.",
+      "on_first_meet": "You have found the secret room. The figure in the chair was already here. It has been here. When you enter, the head inclines — not to look at you, but to acknowledge that it already knows you are there.",
+      "on_revisit": "The Oracle's head inclines again, shallower this time. 'You came back. Most do not.'",
+      "on_leave": "'The question you did not ask is the important one. You will know what it is when you need it.'",
+      "dialogue": {
+        "greeting": "I have been waiting for someone to ask the right question. I have been waiting quite a long time. Ask.",
+        "options": [
+          {
+            "id": "ask_how_to_end",
+            "player": "How do I end this?",
+            "response": "The king, the binding, the dungeon as a trap — all of it ends the same way. The crown shatters when the king is sufficiently weakened and struck on the crown itself with holy or fire damage. When the crown is destroyed, the binding releases. The king falls. The soldiers rest. The dungeon does not collapse, but it becomes simply a place — which is almost worse, in its way."
+          },
+          {
+            "id": "ask_what_is_this_place",
+            "player": "What is this place?",
+            "response": "It was built as a vault and burial complex by a king who was afraid of everything, including death. Death came for him anyway, as it does. His court mage, who had made an arrangement with something old and unkind, offered the king a way to remain. The king accepted. He did not read the terms carefully. This is what he got."
+          },
+          {
+            "id": "ask_about_ring",
+            "player": "I'm looking for the Royal Signet Ring.",
+            "response": "I have it. It was brought here by the last person who tried what you are trying, three hundred years ago. They reached the throne room but not past it. They left the ring with me for safekeeping, against the day someone would return. Here.",
+            "triggers": "give_item"
+          },
+          {
+            "id": "ask_specific_room",
+            "player": "Tell me about a specific room.",
+            "response": "Name the room. I will tell you what you need to know about it — one room, one true answer. What I tell you will be useful. It may not be what you wanted to hear.",
+            "triggers": "room_query"
+          },
+          {
+            "id": "ask_about_oracle",
+            "player": "What are you?",
+            "response": "A question I no longer answer for the living. Sufficient to say: I am not bound here the way the soldiers are. I stay because the work is not yet finished. When it is finished, I will stop staying. I am looking forward to that."
+          }
+        ]
+      },
+      "gives_item": {
+        "item_id": "ancient_signet_ring",
+        "condition": "player_asks_about_ring",
+        "description": "Extends one hand. The ring is on the palm, as if it has been waiting there the whole time."
+      },
+      "quest_id": "quest_undead_king"
+    },
+    {
+      "id": "npc_desperate_survivor",
+      "name": "Desperate Survivor",
+      "tier": 1,
+      "tags": ["human", "scared", "common"],
+      "weight": 4,
+      "archetype": "survivor",
+      "hostile": false,
+      "description": "Someone who came down here with a plan that did not survive contact with the dungeon. The gear is mismatched — one item too nice, two items improvised. The eyes are scanning the room constantly. The hands won't be still. The survivor has found a defensible corner and has been occupying it for some time judging by the evidence: a cold fire-circle, a water skin almost empty, a knife held point-out when you entered.",
+      "on_first_meet": "The person in the corner shows the knife before they see your face. Then: 'Oh. Oh, you're — you're alive. You're not— are you alone? Are there more of you? How did you get past the— there were two of them in the hallway—'",
+      "on_revisit": "'You came back. I wasn't sure if you'd come back.'",
+      "on_leave": "'Please come back. Or — find a way out and come back to tell me which one. Please.'",
+      "dialogue": {
+        "greeting": "I've been here — I don't know. Two days? Three? I can't get back past the hall — there's something in there now that wasn't there when I came through. I need to get out.",
+        "options": [
+          {
+            "id": "ask_what_happened",
+            "player": "What happened to you?",
+            "response": "There was a group of us. Four. We came down to see — we'd heard stories. The first hall was fine. Then the torches started going out and things started — moving. We got separated. I haven't seen the others. I don't know if they're—"
+          },
+          {
+            "id": "ask_what_blocking",
+            "player": "What's blocking the hallway?",
+            "response": "It looks like a suit of armor. But it's walking. By itself. It patrols the same stretch over and over. I tried to wait it out but it doesn't stop. Does it stop? Please tell me it eventually stops."
+          },
+          {
+            "id": "offer_escort",
+            "player": "I'll clear the way.",
+            "response": "'Would you? Really? I have some things — not much, but— I'll give you everything I have left if you get me out. I'm not useful down here. I know that now. I just want out.'",
+            "triggers": "start_quest_escort_survivor"
+          },
+          {
+            "id": "ask_seen_anything",
+            "player": "Have you seen anything useful?",
+            "response": "There's a room off to the left of here where a door was open — I could see inside but didn't go in. There was light, proper light, and something on a pedestal. I don't know what. I was too scared. Maybe it's something? I don't know."
+          }
+        ]
+      },
+      "gives_item": {
+        "item_id": "torch",
+        "condition": "player_talks_to_them",
+        "description": "'Here — take this. I have two more. You need it more than I do down here.'"
+      },
+      "quest_id": "quest_survivor_escort"
+    }
+  ]
+}

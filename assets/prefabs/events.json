@@ -1,0 +1,356 @@
+{
+  "_meta": {
+    "file": "events.json",
+    "description": "Standalone events placed in rooms — environmental atmosphere, interactive mechanics, and one-time discoveries. Referenced by rooms.json via possible_events.",
+    "fields": {
+      "id": "Unique event identifier",
+      "name": "Display name",
+      "tier": "1–5 — matches room tier range where this event is appropriate",
+      "tags": "Used by room filtering",
+      "weight": "Spawn probability weight",
+      "type": "environmental | interactive | discovery",
+      "on_notice": "What the player sees that alerts them to the event's presence",
+      "on_engage": "Full description when the player interacts with the event",
+      "on_resolve": "Text after the event is completed or passes",
+      "options": "For interactive events — the choices available and their outcomes",
+      "repeatable": "Whether this event can appear again on re-entry"
+    }
+  },
+  "events": [
+    {
+      "id": "event_distant_sound",
+      "name": "Distant Sound",
+      "tier": 1,
+      "tags": ["atmosphere", "warning"],
+      "weight": 10,
+      "type": "environmental",
+      "repeatable": true,
+      "on_notice": "Something echoes from another part of the dungeon — too far away to locate, close enough to hear.",
+      "on_engage": null,
+      "on_resolve": "The sound does not repeat. Whatever made it either stopped or moved.",
+      "variants": [
+        "A scream from somewhere below. Sharp, short, then nothing.",
+        "Stone grinding on stone — slow, deliberate, as if a very large door is moving.",
+        "Laughter, low and without humor, from a direction you can't fix.",
+        "A rhythmic impact, like something being hammered, that stops mid-sequence.",
+        "A voice — unintelligible at this distance — that rises and then drops below hearing."
+      ]
+    },
+    {
+      "id": "event_torch_out",
+      "name": "Torch Extinction",
+      "tier": 1,
+      "tags": ["darkness", "atmosphere", "hazard_minor"],
+      "weight": 8,
+      "type": "environmental",
+      "repeatable": true,
+      "on_notice": "The light changes — specifically, it diminishes. One of the wall torches is guttering.",
+      "on_engage": "The torch dies. The room goes to whatever ambient light remains, which may be very little or none.",
+      "on_resolve": "You adjust to the dark or produce another light source.",
+      "options": [
+        {
+          "id": "use_new_torch",
+          "description": "Light a new torch from inventory.",
+          "requires": "torch in inventory",
+          "outcome": "Full light restored."
+        },
+        {
+          "id": "relight_wall_torch",
+          "description": "Attempt to relight the wall torch.",
+          "requires": "fire source",
+          "outcome": "Wall torch relights. Burns for 3 more rooms."
+        },
+        {
+          "id": "proceed_in_dark",
+          "description": "Continue without light.",
+          "outcome": "All Perception and combat checks at -3 until light is restored. Trap detection becomes nearly impossible."
+        }
+      ]
+    },
+    {
+      "id": "event_haunted_whispers",
+      "name": "Haunted Whispers",
+      "tier": 2,
+      "tags": ["magic", "atmosphere", "sanity"],
+      "weight": 5,
+      "type": "environmental",
+      "repeatable": false,
+      "on_notice": "The walls are doing something. Not a sound exactly — more of an intention that presents as sound. Words are almost there.",
+      "on_engage": "You stop and listen. The words clarify — not fully, not enough to transcribe, but enough to understand that they are about you. Not a warning. Not an attack. An assessment. Something is taking stock of you.",
+      "on_resolve": "The whispers stop at the room boundary. Whatever assessed you made its judgment and lost interest.",
+      "options": [
+        {
+          "id": "listen",
+          "description": "Stand still and try to make out the words.",
+          "check": "Willpower DC 12",
+          "on_success": "You catch a phrase — specific, relevant: the location of a hidden room, the weakness of a nearby enemy, or the content of the next locked chest. This is true information.",
+          "on_fail": "The words fragment into noise. Willpower check DC 10 or gain 'unsettled' status: -1 to all checks for 2 rooms."
+        },
+        {
+          "id": "ignore",
+          "description": "Keep moving. Don't engage with whatever this is.",
+          "outcome": "No effect. The whispers follow for one room, then stop."
+        }
+      ]
+    },
+    {
+      "id": "event_secret_door_hint",
+      "name": "Hidden Draft",
+      "tier": 2,
+      "tags": ["exploration", "discovery", "hidden"],
+      "weight": 5,
+      "type": "discovery",
+      "repeatable": false,
+      "on_notice": "A draft from a featureless wall — cold, moving air from a place where walls do not move air.",
+      "on_engage": "You press along the wall. The stone gives slightly at one point — not crumbling, but pivoting. The mechanism is old and smooth from use. This wall has been opened before, regularly, by someone who knew exactly where to push.",
+      "on_resolve": "The hidden room is revealed on the map. Its entrance is marked for future use.",
+      "options": [
+        {
+          "id": "investigate",
+          "description": "Investigate the draft and find the door.",
+          "check": "Perception DC 11",
+          "on_success": "Hidden room discovered. Added to map.",
+          "on_fail": "Nothing found this pass. Can try again with +2 on the next attempt."
+        }
+      ]
+    },
+    {
+      "id": "event_ancient_inscription",
+      "name": "Wall Inscription",
+      "tier": 1,
+      "tags": ["lore", "knowledge", "readable"],
+      "weight": 7,
+      "type": "discovery",
+      "repeatable": false,
+      "on_notice": "Text on the wall. Not a rune — a language, written with effort, at a specific height. Someone stood here and wrote this deliberately.",
+      "on_engage": "You read it. The language is old but not entirely foreign.",
+      "on_resolve": "The inscription remains. You've understood what it wanted to say.",
+      "inscription_pool": [
+        { "id": "insc_001", "text": "The vault is sealed against the crown. This was intentional. The king does not know who insisted on it.", "xp": 5 },
+        { "id": "insc_002", "text": "Guard rotation: crypt, armory, upper hall, armory, crypt. The crypt guard does not respond to sound. Only movement.", "xp": 5 },
+        { "id": "insc_003", "text": "Do not look at the throne room carvings for more than a moment. This is not superstition.", "xp": 5 },
+        { "id": "insc_004", "text": "The well is not connected to the water table. It is connected to something else. Splash says enough.", "xp": 5 },
+        { "id": "insc_005", "text": "Year 4 of the binding. The king has stopped speaking. He gives commands in writing now. The writing changes every week. Less each time.", "xp": 10 },
+        { "id": "insc_006", "text": "The court mage left by a door I have never found. I have been looking since the binding. If you find it, note that it goes up, not down.", "xp": 10 },
+        { "id": "insc_007", "text": "The slimes in the lower hall are afraid of fire. Use this.", "xp": 5 },
+        { "id": "insc_008", "text": "The Crypt Warden is a person. Was a person. His name was Aldric. He would not have wanted this. Remember that if you face him.", "xp": 10 }
+      ]
+    },
+    {
+      "id": "event_well_of_fate",
+      "name": "Well of Fate",
+      "tier": 3,
+      "tags": ["interactive", "gamble", "magic", "well_room"],
+      "weight": 2,
+      "type": "interactive",
+      "repeatable": false,
+      "on_notice": "The well is glowing. Not strongly — a blue-white light rising from below, like moonlight reflected in water, except there is no moonlight here. The DO NOT DRINK inscription is still there. The glow is recent.",
+      "on_engage": "You look down into the well. The glow comes from far below — too far to be a floor. The light pulses slowly. The well is waiting for something, in the patient way of things that have been waiting a very long time.",
+      "on_resolve": "The well's light dims slowly after the exchange. Whatever it wanted from the transaction, it received.",
+      "options": [
+        {
+          "id": "drop_coin",
+          "description": "Drop a coin into the well.",
+          "cost": "1 gold",
+          "on_engage": "The coin falls. You count three seconds before you hear it hit. The light pulses once, strongly. Then something happens.",
+          "outcome": {
+            "type": "random",
+            "roll": "1d10",
+            "results": [
+              { "roll": "1–2", "type": "bad", "effect": "summon_wraith", "description": "A pale shape rises from the well. The coin displeased it, or pleased it in the wrong way." },
+              { "roll": "3", "type": "bad", "effect": "curse_max_hp", "amount": -5, "description": "A chill settles in the chest that doesn't leave. Max HP reduced by 5 until rested at a shrine." },
+              { "roll": "4", "type": "bad", "effect": "teleport_random", "description": "The floor drops away briefly and you are somewhere else." },
+              { "roll": "5–6", "type": "neutral", "effect": "reveal_map", "description": "The water shows you something briefly — a map of the dungeon's current floor, landmarks included, for ten seconds." },
+              { "roll": "7–8", "type": "good", "effect": "heal_full", "description": "Warmth from below. You feel completely, immediately well." },
+              { "roll": "9", "type": "good", "effect": "buff_all_stats", "amount": 2, "duration_rooms": 5, "description": "The light settles into you. All stats +2 for five rooms." },
+              { "roll": "10", "type": "great", "effect": "give_item", "item_id": "ancient_signet_ring", "description": "The coin comes back up. With it, a ring — carried on the surface of the water. You didn't put it there." }
+            ]
+          }
+        },
+        {
+          "id": "drink_anyway",
+          "description": "Drink from the well despite the warning.",
+          "on_engage": "The water is cold. It tastes of copper and something floral. It is wrong in a way that your body identifies immediately.",
+          "outcome": {
+            "type": "random",
+            "roll": "1d6",
+            "results": [
+              { "roll": "1–3", "effect": "poisoned_severe", "damage_per_turn": 8, "duration_turns": 4, "description": "Whatever is in the water is not for the living. Severe poison: 8 damage per turn, 4 turns." },
+              { "roll": "4–5", "effect": "hallucination", "duration_rooms": 3, "description": "The dungeon looks different for three rooms — enemies appear where there are none, doorways appear in solid walls. Perception checks at -4." },
+              { "roll": "6", "effect": "heal_full_and_buff", "description": "Your body processes the water. You feel extraordinary. Maybe the warning was for lesser constitutions." }
+            ]
+          }
+        },
+        {
+          "id": "leave_it",
+          "description": "Leave the well alone.",
+          "outcome": "Nothing happens. The light continues to pulse."
+        }
+      ]
+    },
+    {
+      "id": "event_shrine_blessing",
+      "name": "Shrine Blessing",
+      "tier": 2,
+      "tags": ["holy", "healing", "interactive", "shrine"],
+      "weight": 3,
+      "type": "interactive",
+      "repeatable": false,
+      "on_notice": "The altar is warm in a room that has no heat source. The warmth is specific and directional — it comes from the stone itself.",
+      "on_engage": "You approach the altar. The warmth increases. The figure above it — robed, faceless, arms extended — is unchanged, but the attitude of it reads differently up close. Not threatening. Waiting.",
+      "on_resolve": "The warmth settles. The altar cools slightly, its purpose served for now.",
+      "options": [
+        {
+          "id": "pray",
+          "description": "Lay your hand on the altar and pray — to whatever this is.",
+          "once_per_visit": true,
+          "outcome": {
+            "heal": 25,
+            "additional": {
+              "condition": "player_has_cursed_item",
+              "effect": "curse_suppressed",
+              "duration_rooms": 10,
+              "description": "The warmth moves to the cursed item and holds there. Its effect is quiet for now."
+            }
+          },
+          "on_engage": "The stone under your hand is very warm, then hot, then warm again. You feel better in a way that is not reducible to HP. Something in the dungeon has noticed you, briefly, and chosen to be kind about it."
+        },
+        {
+          "id": "offer_item",
+          "description": "Leave an item as an offering.",
+          "on_engage": "You place the item on the altar. It is accepted — the item recedes into the stone, slowly, as if absorbed. The altar hums.",
+          "outcome": {
+            "type": "exchange",
+            "give": "any_item",
+            "receive": "random_item_one_tier_higher",
+            "description": "The offering is taken. In its place, something better is left on the altar."
+          }
+        },
+        {
+          "id": "leave",
+          "description": "Leave the shrine without praying.",
+          "outcome": "The warmth doesn't follow you, but it remains available. You can come back."
+        }
+      ]
+    },
+    {
+      "id": "event_alchemy_table",
+      "name": "Active Alchemy Table",
+      "tier": 3,
+      "tags": ["interactive", "craft", "alchemist_lab"],
+      "weight": 2,
+      "type": "interactive",
+      "repeatable": false,
+      "on_notice": "Among the broken glass, one station is intact — burner lit, flask in place, reagents still accessible. Someone stopped mid-work.",
+      "on_engage": "The setup is: a sealed flask of stabilized compound over a flame, with two unused reagent slots. The notebook is open to a recipe. You can read it. Whether you can follow it is another question.",
+      "on_resolve": "The station cools. The burner gutters out after use.",
+      "options": [
+        {
+          "id": "follow_recipe",
+          "description": "Follow the recipe in the notebook.",
+          "check": "Intelligence DC 12",
+          "on_success": "The compound combines correctly. Result: one health_potion_standard created.",
+          "on_fail": "The compound does something unexpected — not explosive, but wrong. Flask must be discarded. No result."
+        },
+        {
+          "id": "improvise",
+          "description": "Add materials from your inventory to the active flask.",
+          "requires": "any_material_item in inventory",
+          "check": "Intelligence DC 15",
+          "on_success": {
+            "type": "random",
+            "possible": ["health_potion_major", "strength_potion", "bomb_fire", "antidote", "invisibility_potion"],
+            "description": "The improvisation works. Result is random based on material used."
+          },
+          "on_fail": "Explosion. 10 fire damage to the player. Station destroyed."
+        },
+        {
+          "id": "take_sealed_urns",
+          "description": "Take the three sealed urns without opening them.",
+          "outcome": "Three sealed urns added to inventory. Each is a volatile flask — use as bomb_fire, but with additional random effect on detonation."
+        }
+      ]
+    },
+    {
+      "id": "event_ritual_activation",
+      "name": "The Ritual Circle",
+      "tier": 4,
+      "tags": ["magic", "interactive", "ritual_circle", "story"],
+      "weight": 1,
+      "type": "interactive",
+      "repeatable": false,
+      "on_notice": "The central white stone calls attention by contrast — everything else in this room is dark and complex. The white is deliberate, prepared.",
+      "on_engage": "You step into the circle. The silver wire in the floor brightens. The candles flare. The standing stones warm simultaneously. Something is activating — you are the key that was missing.",
+      "on_resolve": "The circle quiets after the activation. The white stone is no longer white — it is the same color as the rest of the floor now. Used.",
+      "options": [
+        {
+          "id": "stand_in_circle",
+          "description": "Stand in the central white stone and remain.",
+          "check": "Willpower DC 14",
+          "on_success": {
+            "effect": "revelation",
+            "description": "The ritual completes. You receive a vision: the dungeon's full map revealed, all enemy locations marked for the next 3 rooms, and the knowledge that the Undead King's crown is the seat of his binding.",
+            "bonus": "Quest 'The Undead King' advances — 'Weakness of the Crown' objective marked complete."
+          },
+          "on_fail": {
+            "damage": 20,
+            "damage_type": "necrotic",
+            "description": "The circle's energy is too much. It discharges through you. 20 necrotic damage, and you are ejected from the circle."
+          }
+        },
+        {
+          "id": "disrupt_circle",
+          "description": "Break the silver wire to disrupt the circle before it activates.",
+          "check": "Dexterity DC 13",
+          "on_success": "The circle goes dark. No activation, no risk. The room becomes simply an octagonal room.",
+          "on_fail": "You break the wrong part first. The circle activates with you in it — forced to make the Willpower check."
+        }
+      ]
+    },
+    {
+      "id": "event_ground_tremor",
+      "name": "Ground Tremor",
+      "tier": 2,
+      "tags": ["hazard", "structural", "atmosphere"],
+      "weight": 4,
+      "type": "environmental",
+      "repeatable": true,
+      "on_notice": "The floor vibrates — briefly, deeply, as if something very large has moved far below.",
+      "on_engage": "The tremor lasts three seconds. Dust falls from the ceiling. An unsecured torch bracket rotates and the torch falls to the floor, still lit.",
+      "on_resolve": "The dungeon settles. The dust hangs in the air for a minute before dispersing.",
+      "outcomes": [
+        { "chance": 0.6, "effect": "none", "description": "No structural consequence. The dungeon holds." },
+        { "chance": 0.2, "effect": "item_check", "description": "All fragile items (potions, scrolls) in inventory require a Dexterity check DC 10 or one is broken." },
+        { "chance": 0.1, "effect": "new_crack", "description": "A crack opens in the wall, exposing a cavity. 50% chance of containing a random loot_floor_tier2 item." },
+        { "chance": 0.1, "effect": "ceiling_partial", "damage": 8, "damage_type": "bludgeoning", "description": "A stone falls from the ceiling. Agility DC 11 to avoid, 8 damage on hit." }
+      ]
+    },
+    {
+      "id": "event_flooded_hazard",
+      "name": "The Water Moves",
+      "tier": 3,
+      "tags": ["water", "creature", "flooded_hall"],
+      "weight": 3,
+      "type": "environmental",
+      "repeatable": true,
+      "on_notice": "The water in the flooded hall moves with purpose. Not a current — a displacement.",
+      "on_engage": "Something under the surface is large enough to push water ahead of it. It circles the hall at speed. You cannot see it — the water is too dark.",
+      "on_resolve": "The displacement slows. The thing, whatever it is, submerges fully and does not surface again this pass.",
+      "options": [
+        {
+          "id": "ignore_and_cross",
+          "description": "Move through the water quickly.",
+          "check": "Agility DC 12",
+          "on_success": "You cross before whatever is in the water decides to engage.",
+          "on_fail": "Something grabs your leg. Strength DC 13 to break free. On failure: pulled under, 15 damage, surfaced on far side."
+        },
+        {
+          "id": "throw_object",
+          "description": "Throw something into the far end of the hall to draw the creature away.",
+          "requires": "any_item",
+          "outcome": "The displacement moves toward the sound. Safe crossing window: 2 turns."
+        }
+      ]
+    }
+  ]
+}

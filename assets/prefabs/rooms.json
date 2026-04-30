@@ -1,0 +1,382 @@
+{
+  "_meta": {
+    "file": "rooms.json",
+    "description": "All room templates used for procedural dungeon map generation. Each room has a deterministic on_enter and on_exit description, a list of possible events (enemies/items/npcs/traps), and connection rules.",
+    "fields": {
+      "id": "Unique room identifier",
+      "name": "Display name shown to the player",
+      "tier": "Dungeon depth tier 1–5. Controls what enemies/loot spawn here.",
+      "tags": "Used by generation rules to filter and place rooms appropriately",
+      "weight": "Relative spawn probability. Higher = more common on maps.",
+      "size": "small | medium | large — affects how many events can coexist",
+      "on_enter": "Text shown when the player first steps into the room",
+      "on_revisit": "Text shown on subsequent visits",
+      "on_exit": "Text shown when the player leaves the room for the last time (cleared/finished)",
+      "ambient": "Short atmospheric lines shown periodically while in the room",
+      "event_slots": "How many events (enemy/item/npc/trap) this room can hold simultaneously",
+      "possible_events": "List of event type tags this room allows. References events.json, enemies.json, npcs.json, traps.json",
+      "connections": "Generation hints: min/max exits this room should have",
+      "locked": "If true, requires a key item to enter — references items.json",
+      "special": "Any unique mechanic or rule that applies to this room"
+    }
+  },
+  "rooms": [
+    {
+      "id": "entrance_gate",
+      "name": "Entrance Gate",
+      "tier": 1,
+      "tags": ["entrance", "outdoor", "story", "unique"],
+      "weight": 1,
+      "size": "medium",
+      "on_enter": "The gate rises before you — two slabs of black stone fitted so tightly that no mortar was needed. The wind coming from below is cold and smells of deep earth and old iron. Torchlight from somewhere inside throws amber flickers across runes carved at shoulder height. You cannot read them. At the threshold, someone has left a crude wooden doll, face-down in the dirt. The gate is open. It has been open for a long time.",
+      "on_revisit": "The entrance yawns behind you. The cold draft hasn't changed. The doll is still there, face-down.",
+      "on_exit": "You step past the threshold. The gate remains open. Whatever was carved into the stone feels less like decoration now and more like a warning you've already ignored.",
+      "ambient": [
+        "The wind from below picks up for a moment, then goes still.",
+        "One of the runes catches the light differently than the others.",
+        "Something scurries in the dark just inside the gate — but stops when you look."
+      ],
+      "event_slots": 1,
+      "possible_events": ["npc_old_guardian", "npc_desperate_survivor"],
+      "connections": { "min": 1, "max": 1 },
+      "special": "Always the dungeon starting room. Must connect to exactly one room. Cannot contain enemies or traps."
+    },
+    {
+      "id": "torch_hall",
+      "name": "Torch Hall",
+      "tier": 1,
+      "tags": ["corridor", "transition", "common"],
+      "weight": 10,
+      "size": "medium",
+      "on_enter": "A corridor stretches ahead, lined on both sides with iron wall-sconces. Half the torches are still burning — guttering, nearly dead, but burning. The floor is dressed stone, cracked down the center by something that heaved upward years ago. Gravel and small bones crunch underfoot. The light is orange and unsteady. The shadows move even when nothing else does.",
+      "on_revisit": "The torches flicker as you pass through again. A draft follows you.",
+      "on_exit": "The corridor behind you. Somewhere ahead, the torches cast less light.",
+      "ambient": [
+        "A torch hisses and dims, then catches again.",
+        "The crack in the floor widens slightly near the far wall.",
+        "Something drips from the ceiling, but there's no water visible."
+      ],
+      "event_slots": 2,
+      "possible_events": ["item_floor_tier1", "trap_dart", "enemy_skeleton_tier2", "event_distant_sound"],
+      "connections": { "min": 2, "max": 4 }
+    },
+    {
+      "id": "guard_room",
+      "name": "Guard Room",
+      "tier": 2,
+      "tags": ["indoor", "military", "common"],
+      "weight": 6,
+      "size": "small",
+      "on_enter": "A square room with two overturned stools and a table missing one leg. A rack on the far wall holds empty pegs where weapons once hung — whatever was there was taken or rusted away. A coat of arms is painted above the door in faded colors: a crown over a closed fist. Empty tin cups litter the floor. Whoever was stationed here left quickly, or did not leave at all.",
+      "on_revisit": "The guard room. The cups haven't moved. Nothing here moves anymore.",
+      "on_exit": "The guard post behind you. No one is coming to fill it.",
+      "ambient": [
+        "A cup rolls an inch across the floor for no reason.",
+        "The coat of arms on the wall seems to track you as you move.",
+        "A draft from under the far door carries the faint smell of rust."
+      ],
+      "event_slots": 2,
+      "possible_events": ["enemy_skeleton_warrior", "enemy_zombie", "item_floor_tier1", "item_floor_tier2", "trap_pressure_plate", "npc_ghost_soldier"],
+      "connections": { "min": 1, "max": 3 }
+    },
+    {
+      "id": "barracks",
+      "name": "Barracks",
+      "tier": 2,
+      "tags": ["indoor", "military", "rest"],
+      "weight": 5,
+      "size": "large",
+      "on_enter": "Two rows of wooden bunks line the walls, most collapsed into themselves. The straw has long since dissolved into grey dust. At the far end, a footlocker sits open and empty except for a tattered scarf still hung on a hook above it. Names are carved into the wood of the nearest bunk frame — a dozen names, scratched with a knife. Some are crossed out. One is circled.",
+      "on_revisit": "The barracks. The names on the bunk are still there. You read them again without meaning to.",
+      "on_exit": "The rows of bunks shrink behind you. Whoever slept here did not sleep peacefully at the end.",
+      "ambient": [
+        "Dust drifts from a collapsed bunk as if weight just left it.",
+        "The scarf shifts in an unfelt breeze.",
+        "The name that is circled — you could have sworn it was different last time you looked."
+      ],
+      "event_slots": 3,
+      "possible_events": ["enemy_zombie", "enemy_skeleton_warrior", "item_floor_tier2", "item_hidden_tier2", "npc_ghost_soldier", "event_haunted_whispers"],
+      "connections": { "min": 1, "max": 2 },
+      "special": "Contains a rest spot. Player may recover 10 HP here once per visit if no enemies are present."
+    },
+    {
+      "id": "library",
+      "name": "Abandoned Library",
+      "tier": 2,
+      "tags": ["indoor", "knowledge", "scroll"],
+      "weight": 4,
+      "size": "large",
+      "on_enter": "Shelves cover every wall from floor to ceiling, packed with books in states of ruin. The bindings have split. The pages have welded themselves into solid blocks with moisture. A reading lectern stands in the center with an open book — its current page is blank but the edges are stained with ink, as if something was recently erased. The air is close and dry and smells of old paper and mildew. The dust on the floor has been disturbed. Something has been walking the shelves.",
+      "on_revisit": "The library. The book on the lectern is still open to that blank page.",
+      "on_exit": "You leave the library. The knowledge here has mostly rotted, but you take what you can.",
+      "ambient": [
+        "A book slides from a shelf and lands open. Its pages are all blank.",
+        "A rustling from the back corner. When you look, nothing.",
+        "The lectern book's page appears to have text — but only from the corner of your eye."
+      ],
+      "event_slots": 3,
+      "possible_events": ["item_scroll_random", "item_scroll_healing", "item_lore_fragment", "enemy_cave_spider", "npc_mad_scholar", "trap_rune_glyph", "event_secret_door_hint"],
+      "connections": { "min": 1, "max": 3 }
+    },
+    {
+      "id": "secret_room",
+      "name": "Secret Chamber",
+      "tier": 3,
+      "tags": ["hidden", "rare", "loot"],
+      "weight": 3,
+      "size": "small",
+      "on_enter": "The false wall pivots smoothly — it has been opened before, and often. The room beyond is small and deliberate: a stone pedestal at the center, a single torch in a wall bracket that still burns (enchanted, perhaps), and a chest against the far wall that has not been touched. The floor here is clean. Someone maintained this room. Whoever it was has not returned recently — the single torch burns steadily in the sealed air.",
+      "on_revisit": "The secret room. The torch burns. The pedestal still holds what you left — or didn't take.",
+      "on_exit": "You pull the false wall shut behind you. The seam disappears. No one will know you were here.",
+      "ambient": [
+        "The torch flame is perfectly still. Not a flicker.",
+        "The chest has no lock visible from the outside.",
+        "The pedestal has grooves worn into the top, as if something was placed there regularly for years."
+      ],
+      "event_slots": 2,
+      "possible_events": ["item_chest_rare", "item_special_tier3", "npc_dungeon_oracle"],
+      "connections": { "min": 1, "max": 1 },
+      "special": "Hidden room — not visible on the map until discovered. Discovered via search action or secret_door_hint event. Cannot be reached from boss or entrance rooms directly."
+    },
+    {
+      "id": "armory",
+      "name": "Armory",
+      "tier": 2,
+      "tags": ["indoor", "military", "weapon", "armor"],
+      "weight": 4,
+      "size": "medium",
+      "on_enter": "Weapon racks run the length of both walls, mostly bare. A few rusted spear-shafts remain, their heads corroded away to nothing. Three shields hang from hooks above the far rack — iron-banded wood, each bearing the same closed-fist crest from the guard room. One has been split straight down the middle by something with a great deal of force. Behind a low iron gate at the back of the room is a cage, locked by a hasp that has been broken and rehung to look intact.",
+      "on_revisit": "The armory. The broken shield still hangs split on its hook.",
+      "on_exit": "You leave the armory. Whatever edge you found here, carry it carefully.",
+      "ambient": [
+        "A spear haft rolls off a rack and clatters on the floor without cause.",
+        "The broken shield creaks on its hook.",
+        "The cage at the back — you can hear something has been in it recently."
+      ],
+      "event_slots": 2,
+      "possible_events": ["enemy_animated_knight", "item_weapon_tier2", "item_armor_tier2", "item_chest_minor", "trap_swinging_blade"],
+      "connections": { "min": 1, "max": 3 }
+    },
+    {
+      "id": "well_room",
+      "name": "Well Chamber",
+      "tier": 2,
+      "tags": ["indoor", "water", "interactive", "npc"],
+      "weight": 4,
+      "size": "medium",
+      "on_enter": "A circular chamber with a well at its center, built of older stone than the rest of the dungeon. The mortar here is different — finer, darker. The well's rim has been carved with a single repeated phrase in three languages: two you don't know and one that reads DO NOT DRINK. A wooden bucket hangs on a fraying rope. The water below is not visible. A splash rises from the depths every few minutes with no apparent cause.",
+      "on_revisit": "The well. The rope still sways slightly from last time you were here.",
+      "on_exit": "You leave the well behind. The irregular splashing continues as you go.",
+      "ambient": [
+        "A wet sound rises from the well. Too large to be a drop.",
+        "The rope twitches once, then goes still.",
+        "The candlelit ledge around the well is warm. The well itself is cold."
+      ],
+      "event_slots": 2,
+      "possible_events": ["npc_wandering_pilgrim", "npc_trapped_merchant", "event_well_of_fate", "event_secret_door_hint"],
+      "connections": { "min": 2, "max": 3 }
+    },
+    {
+      "id": "torture_chamber",
+      "name": "Torture Chamber",
+      "tier": 3,
+      "tags": ["indoor", "dark", "lore"],
+      "weight": 3,
+      "size": "medium",
+      "on_enter": "You smell it before you see it — iron and old wood and something chemical underneath both. Hooks hang from the ceiling at varying heights. A rack stands at the center of the room, joints still sound, straps still buckled around nothing. The wall to your right is covered floor to ceiling in scratch marks, some shallow, some carved deep with great effort. Near the door, a wooden stool faces the rack. On the stool is a small book, open to a page covered in neat, official handwriting.",
+      "on_revisit": "The chamber is exactly as you left it. The book is still open to the same page.",
+      "on_exit": "You leave quickly. The room offers nothing but the knowledge that this happened here, once.",
+      "ambient": [
+        "A hook sways slightly in the still air.",
+        "The scratch marks on the wall — you begin counting them before stopping yourself.",
+        "The book on the stool has more pages than it appeared to at first glance."
+      ],
+      "event_slots": 2,
+      "possible_events": ["item_lore_fragment", "item_floor_tier2", "npc_ghost_soldier", "enemy_wraith", "trap_collapse_ceiling"],
+      "connections": { "min": 1, "max": 2 }
+    },
+    {
+      "id": "shrine",
+      "name": "Forgotten Shrine",
+      "tier": 3,
+      "tags": ["indoor", "holy", "healing", "interactive"],
+      "weight": 3,
+      "size": "small",
+      "on_enter": "A low arched alcove off a side passage, barely big enough to stand upright in. A stone slab serves as an altar, smooth from centuries of hands laid on it. Above the altar, carved into the wall, is a figure you cannot identify — robed, faceless, arms extended. Votive offerings are pressed into cracks in the stone: coins, a child's shoe, a braid of hair. The candles on the altar are unlit. Despite this, the room is warm. The air does not smell of dungeon.",
+      "on_revisit": "The shrine. Still warm. The figure above the altar still has no face.",
+      "on_exit": "The warmth fades as you leave. Whatever presence inhabits the shrine does not follow.",
+      "ambient": [
+        "The warmth intensifies briefly, then settles.",
+        "One of the coins pressed into the stone is newer than the others — much newer.",
+        "You feel watched, but not threatened."
+      ],
+      "event_slots": 1,
+      "possible_events": ["event_shrine_blessing", "item_holy_water", "npc_dungeon_oracle"],
+      "connections": { "min": 1, "max": 2 },
+      "special": "Shrine blessing: Player may pray once. Restores 25 HP. If player carries a cursed item, the item is suppressed for 10 rooms."
+    },
+    {
+      "id": "crypt",
+      "name": "Crypt",
+      "tier": 3,
+      "tags": ["indoor", "undead", "dark"],
+      "weight": 5,
+      "size": "large",
+      "on_enter": "The temperature drops sharply at the threshold. Two rows of stone sarcophagi run the length of the room, each sealed with a carved lid — faces in repose, hands folded, names chiseled below in a dead language. Several lids have been pushed aside. Not broken, not pulled — pushed, from inside. The open sarcophagi are empty. The displaced lids lie neatly beside them, as if whoever opened them had somewhere to be.",
+      "on_revisit": "The crypt. The open sarcophagi are still open. The lids have not moved.",
+      "on_exit": "You leave the crypt. The cold follows you a little way down the passage before relenting.",
+      "ambient": [
+        "Bone scrapes on stone somewhere near the back.",
+        "One of the sealed lids has a hairline crack that wasn't there before.",
+        "The name on the nearest sarcophagus is partially legible. The last word appears to be a title."
+      ],
+      "event_slots": 3,
+      "possible_events": ["enemy_ghoul", "enemy_zombie", "enemy_skeleton_warrior", "item_floor_tier2", "item_hidden_tier3", "npc_ghost_soldier", "trap_sarcophagus_trap"],
+      "connections": { "min": 2, "max": 3 }
+    },
+    {
+      "id": "flooded_hall",
+      "name": "Flooded Hall",
+      "tier": 3,
+      "tags": ["indoor", "water", "hazard"],
+      "weight": 3,
+      "size": "large",
+      "on_enter": "The passage opens into a long hall and the water hits you at mid-shin — black, freezing, moving with a faint current that has no obvious source. Submerged furniture creates dark shapes underfoot. A chandelier hangs low over the water, its lowest candles just touching the surface. On the far wall, a door is still above waterline. The water has been here long enough that algae has begun growing on the stone columns. Something moves in the water near the far wall. Not a ripple — a displacement.",
+      "on_revisit": "The flooded hall. The water level is unchanged. The displacement near the far wall recurs.",
+      "on_exit": "Your boots are soaked through. The cold travels up from the floor for a long time after you leave.",
+      "ambient": [
+        "Something brushes your leg beneath the surface.",
+        "The water ripples outward from no point of origin.",
+        "The chandelier sways, though the air is perfectly still."
+      ],
+      "event_slots": 2,
+      "possible_events": ["enemy_cave_spider", "enemy_slime", "item_submerged_tier2", "trap_submerged_pit", "event_flooded_hazard"],
+      "connections": { "min": 1, "max": 3 },
+      "special": "Movement in this room costs double. Fire items and torches are extinguished on entry unless protected."
+    },
+    {
+      "id": "alchemist_lab",
+      "name": "Alchemist's Laboratory",
+      "tier": 3,
+      "tags": ["indoor", "magic", "craft", "hazard"],
+      "weight": 3,
+      "size": "medium",
+      "on_enter": "The smell hits you hard — sulfur, vinegar, something sweet that makes your eyes water. Workbenches are buried under glass apparatus, most broken, the shards scattered across the floor in every direction. Three ceramic urns are intact and sealed with wax. A notebook lies open on the central bench — the handwriting grows increasingly erratic toward the final entry, which ends mid-word. One burner is still lit under a flask of pale green liquid that has been slowly evaporating for what looks like months. The liquid is almost gone.",
+      "on_revisit": "The lab. The green liquid has evaporated further. Soon the flask will be empty.",
+      "on_exit": "You leave the lab. The smell clings to your clothing for a long time.",
+      "ambient": [
+        "The sealed urn nearest the door vibrates faintly.",
+        "The remaining green liquid in the flask swirls once, counterclockwise.",
+        "A shard of glass on the floor has arranged itself differently than before."
+      ],
+      "event_slots": 2,
+      "possible_events": ["item_potion_random", "item_chest_minor", "item_alchemical_material", "npc_mad_scholar", "trap_volatile_flask", "event_alchemy_table"],
+      "connections": { "min": 1, "max": 3 },
+      "special": "Breaking one of the sealed urns triggers a random effect: 30% explosion (15 fire damage AoE), 40% poison cloud (status: poisoned 3 turns), 30% healing vapors (heal 20 HP)."
+    },
+    {
+      "id": "ritual_circle",
+      "name": "Ritual Chamber",
+      "tier": 4,
+      "tags": ["indoor", "magic", "dark", "boss_arena"],
+      "weight": 2,
+      "size": "large",
+      "on_enter": "An octagonal room, each wall faced with polished black stone that reflects the room back at you in dark mirror. The floor is inlaid with a circle of silver and copper wire, intricate beyond any reasonable craft, connecting eight standing stones arranged around the perimeter. The stones are warm to the touch. Candles at the cardinal points burn with black flame — no heat, no wax consumed. At the center of the circle, the stone floor is pristine and white. Everything else in this dungeon is grey.",
+      "on_revisit": "The ritual chamber. The candles burn unchanged. The white stone at the center is unmarked.",
+      "on_exit": "The candle flames lean toward you as you leave, as if curious. The room lets you go.",
+      "ambient": [
+        "The black candle flames lean together, as if whispering.",
+        "The silver wire in the floor hums at a frequency you feel in your back teeth.",
+        "Your reflection in the polished stone walls is slightly behind you — half a step late."
+      ],
+      "event_slots": 2,
+      "possible_events": ["enemy_dark_mage", "enemy_wraith", "enemy_shadow_stalker", "item_chest_rare", "npc_dungeon_oracle", "event_ritual_activation"],
+      "connections": { "min": 2, "max": 3 },
+      "special": "If the player steps into the central white circle, they trigger the ritual_activation event. Undead enemies in this room take 5 bonus holy damage per hit."
+    },
+    {
+      "id": "throne_room",
+      "name": "Throne Room",
+      "tier": 5,
+      "tags": ["indoor", "boss_arena", "story", "unique"],
+      "weight": 1,
+      "size": "large",
+      "on_enter": "The doors open without you touching them. The hall beyond is enormous — columns rise to a vaulted ceiling lost in darkness. Two rows of iron braziers, unlit, run from the door to the dais at the far end. The throne is black stone, carved with images of conquest and suffering that you look at too long and then away from. The figure on the throne has not moved. It is robed in what was once ceremonial armor, now green with mold, and wears a crown that gives off a faint and sickly light. Its head is bowed. It is still. As you step forward, the braziers ignite one by one from back to front. By the time you reach the center of the hall, you are lit. The figure's head rises.",
+      "on_revisit": "The throne room. The braziers are cold. The throne is empty.",
+      "on_exit": "The doors close behind you with the sound of final things.",
+      "ambient": [
+        "The crown's light pulses once — slowly, like a heartbeat.",
+        "The carvings on the throne seem different each time you glance at them.",
+        "The brazier nearest you flares briefly, for no reason."
+      ],
+      "event_slots": 1,
+      "possible_events": ["enemy_undead_king"],
+      "connections": { "min": 2, "max": 3 },
+      "special": "Boss room. The Undead King is always present on first entry. The Cursed Crown passive reduces player max HP by 5 while in this room. Once the Undead King is defeated, the passage to treasure_vault is unlocked."
+    },
+    {
+      "id": "treasure_vault",
+      "name": "Treasure Vault",
+      "tier": 5,
+      "tags": ["indoor", "loot_legendary", "endgame", "unique"],
+      "weight": 1,
+      "size": "medium",
+      "on_enter": "The door is enormous — three inches of black iron banded with steel — and it is standing open. The room beyond is not what you expected. The wealth is real: coins of a dozen dead kingdoms, gemstones loose in open chests, worked gold objects whose purpose you cannot determine. But the room is also a place someone lived in. A cot in the corner. A small table with a candle burned all the way down. A journal, open. The final entry: 'If you're reading this — good. You earned it. Take what you need. Leave what you don't. There is more to find.' No signature.",
+      "on_revisit": "The vault. The journal is still open. You've read it. You keep reading it.",
+      "on_exit": "You leave the vault. The iron door remains open. The candle on the small table has been replaced — still burned to nothing, but replaced.",
+      "ambient": [
+        "The coins of different kingdoms are sorted by ruler. Someone organized this.",
+        "The cot has been slept in recently.",
+        "The journal has more pages than it appeared to. You haven't reached the end."
+      ],
+      "event_slots": 1,
+      "possible_events": ["item_loot_legendary", "item_chest_legendary"],
+      "connections": { "min": 1, "max": 1 },
+      "locked": {
+        "required_item": "warden_key",
+        "locked_description": "The iron door has a keyhole the size of your fist. It does not yield to force. The lock mechanism has no visible seams — the entire door is the lock.",
+        "unlock_description": "The key turns with a deep, satisfying click. The bolts — multiple, massive — withdraw one by one. The door swings open."
+      },
+      "special": "Endgame room. Reaching this room completes the dungeon's main objective. A hidden second exit exists behind the cot (requires 15 Perception or finding the journal's last page)."
+    },
+    {
+      "id": "lair",
+      "name": "Beast Lair",
+      "tier": 3,
+      "tags": ["indoor", "beast", "dark"],
+      "weight": 3,
+      "size": "medium",
+      "on_enter": "The passage widens into a rough-hewn cave — not dressed stone but natural rock, expanded by something with claws. The walls are scored at varying heights with deep parallel lines. Bones are arranged in piles in each corner, not scattered but accumulated, the way a creature returns to a space again and again with its meals. The ceiling is too low at the edges to stand up straight. At the center of the floor is a depression filled with matted fur, scraps of leather, broken wood — a nest. Whatever made it is large. The nest is warm.",
+      "on_revisit": "The lair. The nest still smells of the creature. Something has been added to it.",
+      "on_exit": "You back out of the lair carefully. The smell of animal territory fades gradually.",
+      "ambient": [
+        "A low sound from deep in the cave — not quite a growl.",
+        "The claw marks on the wall go higher than seems possible.",
+        "Something in the nest moves without wind."
+      ],
+      "event_slots": 2,
+      "possible_events": ["enemy_cave_troll", "enemy_gargoyle", "enemy_giant_rat_pack", "item_floor_tier2"],
+      "connections": { "min": 1, "max": 2 }
+    },
+    {
+      "id": "pit_room",
+      "name": "Pit Room",
+      "tier": 3,
+      "tags": ["indoor", "hazard", "trap"],
+      "weight": 3,
+      "size": "medium",
+      "on_enter": "The room is mostly gone. The floor has collapsed inward, leaving a pit that drops into darkness. A ledge eighteen inches wide circles the room's perimeter — walkable, but not comfortably. Two rope bridges cross the pit: one intact, one missing its planks and reduced to bare rope. From below, the sound of things moving. The walls here have been gouged by many hands at the ledge height — parallel lines, as if people braced themselves while passing.",
+      "on_revisit": "The pit room. The rope bridge is still missing its planks. The sounds from below continue.",
+      "on_exit": "You navigate the ledge and leave the pit behind. The sound from below is cut off as you move away.",
+      "ambient": [
+        "A sound from below — footsteps, or the echo of footsteps.",
+        "The intact rope bridge creaks though nothing stands on it.",
+        "A shape moves in the pit darkness below the rope line."
+      ],
+      "event_slots": 2,
+      "possible_events": ["trap_rope_bridge", "enemy_cave_spider", "enemy_giant_rat_pack", "item_floor_tier2"],
+      "connections": { "min": 2, "max": 3 },
+      "special": "Crossing the intact rope bridge requires an Agility check (DC 10). On failure, player falls — 10 fall damage, lands in the sub-level (pit_sub_level event). Ledge route is always safe but costs one extra action."
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "_meta": {
+    "file": "generation_rules.json",
+    "description": "Rules for assembling a dungeon map from the content files. This file is the engine spec — it defines how rooms, enemies, NPCs, traps, events, and loot are selected, placed, and connected during procedural generation.",
+    "file_references": {
+      "rooms": "rooms.json",
+      "enemies": "enemies.json",
+      "items": "items.json",
+      "npcs": "npcs.json",
+      "traps": "traps.json",
+      "events": "events.json",
+      "quests": "quests.json",
+      "loot_tables": "loot_tables.json"
+    }
+  },
+
+  "map_parameters": {
+    "description": "Top-level parameters for a dungeon map generation run.",
+    "min_rooms": 8,
+    "max_rooms": 18,
+    "recommended_rooms": 12,
+    "tier_distribution": {
+      "description": "What percentage of non-unique rooms should come from each tier bracket.",
+      "tier_1": 0.25,
+      "tier_2": 0.35,
+      "tier_3": 0.25,
+      "tier_4": 0.10,
+      "tier_5": 0.05,
+      "note": "Unique rooms (entrance_gate, throne_room, treasure_vault) are always placed regardless of distribution."
+    },
+    "depth_axis": {
+      "description": "The map has a conceptual depth. Tier 1 rooms go near the start (depth 0–2), tier 5 near the end (depth 8+). This is a soft constraint — deviation creates interesting layouts but shouldn't be ignored entirely.",
+      "tier_to_depth": {
+        "1": [0, 2],
+        "2": [1, 5],
+        "3": [3, 7],
+        "4": [5, 9],
+        "5": [7, 12]
+      }
+    }
+  },
+
+  "required_rooms": {
+    "description": "Rooms that must appear exactly once on every map.",
+    "rooms": [
+      {
+        "id": "entrance_gate",
+        "placement": "first room — the map's starting point",
+        "depth": 0,
+        "connections": "must connect to exactly one other room"
+      },
+      {
+        "id": "throne_room",
+        "placement": "deepest section of the map",
+        "depth": "max_depth - 1",
+        "connections": "must connect to at least 2 rooms including treasure_vault",
+        "requires_adjacent": "at least one of: crypt, armory, ritual_circle"
+      },
+      {
+        "id": "treasure_vault",
+        "placement": "always adjacent to throne_room, always at max_depth",
+        "depth": "max_depth",
+        "connections": "connects only to throne_room",
+        "locked": true,
+        "lock_item": "warden_key or ancient_signet_ring"
+      }
+    ]
+  },
+
+  "optional_unique_rooms": {
+    "description": "Rooms that appear at most once per map, selected by weight.",
+    "rooms": ["secret_room", "shrine", "alchemist_lab", "ritual_circle", "flooded_hall"],
+    "max_optional_unique": 2,
+    "selection": "weighted random from list — all are tier 3+ so place in mid/deep dungeon",
+    "placement_rule": "secret_room must not be directly adjacent to entrance_gate, throne_room, or treasure_vault"
+  },
+
+  "room_connections": {
+    "description": "Rules for connecting rooms into a graph.",
+    "method": "Start from entrance_gate. Extend a main path to throne_room (3–6 rooms). Branch off the main path to fill remaining room count. No dead ends permitted except treasure_vault and secret_room.",
+    "min_connections_per_room": 1,
+    "max_connections_per_room": 4,
+    "branching_factor": "Each room on the main path has a 40% chance of generating one side branch (1–2 rooms). Side branches may branch once more at 20% probability.",
+    "loops": "Generate at least one loop — a secondary path that rejoins the main path, creating an alternate route between two non-adjacent rooms.",
+    "connection_flavor": "When two rooms are connected, the corridor between them is described by the lower-tier room's corridor flavor or a generic torch_hall description if the room has no corridor text.",
+    "locked_doors": {
+      "frequency": "0–1 per map outside the vault",
+      "key_must_be_accessible": true,
+      "key_must_precede_door": "The room containing the key must be reachable without passing through the locked door."
+    }
+  },
+
+  "enemy_placement": {
+    "description": "Rules for placing enemies in rooms.",
+    "rooms_with_enemies_pct": 0.55,
+    "selection_rule": "Choose from enemy pool where enemy.tier <= room.tier + 1 and enemy.tags overlap with room.tags where possible.",
+    "enemy_count_per_room": {
+      "small_room": [1, 1],
+      "medium_room": [1, 2],
+      "large_room": [1, 3]
+    },
+    "boss_rules": {
+      "throne_room": "Always contains undead_king. No other enemies on spawn (they appear in phase 2).",
+      "rooms_with_tag_boss_arena": "Always contain exactly one boss or boss_minor enemy."
+    },
+    "exclusions": [
+      "entrance_gate — no enemies",
+      "shrine — no enemies",
+      "treasure_vault — no enemies",
+      "secret_room — no enemies (by default; override allowed for trap-style secret rooms)"
+    ],
+    "npc_and_enemy_coexist": "NPCs with archetype != 'rival' should not share a room with enemies. If both are assigned to the same room, remove the enemy and place it in an adjacent room instead."
+  },
+
+  "npc_placement": {
+    "description": "Rules for placing NPCs.",
+    "npc_count_per_map": [2, 4],
+    "selection_rule": "Choose NPCs where npc.tier <= room.tier + 1. Check npc.tags against room.tags for compatibility.",
+    "one_per_room": true,
+    "mandatory_npcs": [
+      {
+        "id": "npc_old_guardian",
+        "room": "entrance_gate",
+        "note": "Always present at the entrance."
+      }
+    ],
+    "optional_npcs_by_room_tag": {
+      "library": ["npc_mad_scholar"],
+      "well_room": ["npc_wandering_pilgrim", "npc_trapped_merchant"],
+      "crypt": ["npc_ghost_soldier"],
+      "guard_room": ["npc_ghost_soldier"],
+      "barracks": ["npc_ghost_soldier"],
+      "torture_chamber": ["npc_ghost_soldier"],
+      "secret_room": ["npc_dungeon_oracle"],
+      "any_tier_1_2": ["npc_desperate_survivor"],
+      "any_tier_2_3": ["npc_rival_adventurer"]
+    },
+    "npc_oracle_rule": "npc_dungeon_oracle appears at most once per map, in the secret_room if present, otherwise in a tier 3+ room."
+  },
+
+  "trap_placement": {
+    "description": "Rules for placing traps.",
+    "rooms_with_traps_pct": 0.30,
+    "traps_per_room": 1,
+    "selection_rule": "Choose trap where trap.tier <= room.tier + 1 and trap.tags include at least one room.tag.",
+    "exclusions": [
+      "entrance_gate — no traps",
+      "shrine — no traps",
+      "treasure_vault — no traps (the vault has already been earned)"
+    ],
+    "tag_preferences": {
+      "corridor": ["trap_dart", "trap_swinging_blade"],
+      "crypt": ["trap_sarcophagus_trap"],
+      "pit_room": ["trap_rope_bridge"],
+      "library": ["trap_rune_glyph"],
+      "alchemist_lab": ["trap_volatile_flask"],
+      "large_room": ["trap_poison_gas", "trap_collapse_ceiling"]
+    }
+  },
+
+  "event_placement": {
+    "description": "Rules for placing events.",
+    "environmental_events_per_map": [3, 6],
+    "interactive_events_per_map": [1, 3],
+    "assignment": "Environmental events are assigned to rooms during play (they trigger on visits). Interactive events are anchored to specific room types.",
+    "interactive_event_preferences": {
+      "well_room": ["event_well_of_fate"],
+      "shrine": ["event_shrine_blessing"],
+      "alchemist_lab": ["event_alchemy_table"],
+      "ritual_circle": ["event_ritual_activation"],
+      "any_room": ["event_ancient_inscription", "event_secret_door_hint", "event_haunted_whispers"]
+    },
+    "environmental_event_distribution": "Distribute environmental events across all non-unique rooms. No room gets more than 2 environmental events.",
+    "event_secret_door_hint_rule": "If a secret_room is on the map, event_secret_door_hint must be placed in an adjacent room."
+  },
+
+  "loot_placement": {
+    "description": "Rules for placing loot.",
+    "floor_loot": {
+      "rooms_with_floor_loot_pct": 0.40,
+      "table_selection": "Use loot_floor_tier{room.tier}. If no tier-specific table exists, use the nearest lower tier.",
+      "exclusions": ["entrance_gate", "throne_room"]
+    },
+    "chests": {
+      "chest_frequency": "One chest per 4–5 rooms on average.",
+      "chest_tier_to_table": {
+        "1": "loot_chest_minor",
+        "2": "loot_chest_minor",
+        "3": "loot_chest_standard",
+        "4": "loot_chest_rare",
+        "5": "loot_chest_legendary"
+      },
+      "guaranteed_chest_rooms": ["secret_room", "armory"]
+    },
+    "special_loot": {
+      "library": "Always place 1–2 items from loot_scroll_pool.",
+      "alchemist_lab": "Always place 1 item from loot_alchemical_materials.",
+      "treasure_vault": "Use loot_chest_legendary table regardless of other rules."
+    }
+  },
+
+  "quest_assignment": {
+    "description": "Which quests auto-activate and when.",
+    "auto_start_quests": ["quest_undead_king"],
+    "npc_triggered_quests": {
+      "npc_trapped_merchant": "quest_merchant_escort",
+      "npc_desperate_survivor": "quest_survivor_escort",
+      "npc_rival_adventurer": "quest_rival_alliance",
+      "npc_mad_scholar": "quest_the_mad_scholar"
+    },
+    "quest_npc_placement_rule": "If a quest is selected for a map run, its giver NPC must be placed. Not all quests need to be available every run — select 1–2 side quests per map."
+  },
+
+  "difficulty_modifiers": {
+    "description": "Optional modifiers applied to the whole map at generation time.",
+    "normal": {
+      "enemy_hp_multiplier": 1.0,
+      "enemy_damage_multiplier": 1.0,
+      "loot_quality_bonus": 0,
+      "trap_detection_dc_modifier": 0
+    },
+    "hard": {
+      "enemy_hp_multiplier": 1.3,
+      "enemy_damage_multiplier": 1.2,
+      "loot_quality_bonus": 1,
+      "trap_detection_dc_modifier": 2,
+      "note": "All DCs increased by 2. Enemy counts at the high end of ranges."
+    },
+    "nightmare": {
+      "enemy_hp_multiplier": 1.6,
+      "enemy_damage_multiplier": 1.5,
+      "loot_quality_bonus": 2,
+      "trap_detection_dc_modifier": 4,
+      "special": "The Undead King enters Phase 2 at 50 HP instead of 33 HP. The Cursed Crown reduces max HP by 10 instead of 5."
+    }
+  },
+
+  "validation_checklist": {
+    "description": "Run this checklist on a generated map before presenting it.",
+    "checks": [
+      "entrance_gate exists and is at depth 0",
+      "throne_room exists and is at max depth - 1",
+      "treasure_vault exists adjacent to throne_room at max depth",
+      "treasure_vault is reachable without passing through a locked door that blocks the warden_key or signet_ring",
+      "No room at depth 0 or 1 contains a tier 4 or 5 enemy",
+      "No enemy is in the same room as a non-rival NPC",
+      "At least one healing item is accessible before depth 3",
+      "npc_old_guardian is in entrance_gate",
+      "undead_king is in throne_room",
+      "If secret_room exists, event_secret_door_hint is in an adjacent room",
+      "The warden_key is obtainable (from crypt_warden drop or present in a chest) before the vault is reached",
+      "At least one torch or light source is obtainable in the first 3 rooms"
+    ]
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "_meta": {
+    "file": "loot_tables.json",
+    "description": "All loot tables used by enemies, rooms, chests, and events. Each table specifies rolls and weighted item entries referencing items.json IDs.",
+    "fields": {
+      "id": "Unique loot table identifier — referenced from enemies.json and rooms.json",
+      "description": "What context this table covers",
+      "rolls": "How many items to draw (can be a range [min, max])",
+      "entries": "Weighted item pool. 'nothing' is a valid entry to allow empty results.",
+      "guaranteed": "Items always included regardless of roll — used sparingly"
+    }
+  },
+  "loot_tables": [
+
+    {
+      "id": "loot_vermin",
+      "description": "Drops from giant rats and rat packs",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "rat_pelt", "weight": 6 },
+        { "item_id": "bone_fragment", "weight": 4 },
+        { "item_id": "copper_coin", "weight": 5 },
+        { "item_id": "nothing", "weight": 10 }
+      ]
+    },
+
+    {
+      "id": "loot_beast_small",
+      "description": "Drops from cave spiders and small beasts",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "spider_venom_sac", "weight": 5 },
+        { "item_id": "bone_fragment", "weight": 4 },
+        { "item_id": "copper_coin", "weight": 4 },
+        { "item_id": "nothing", "weight": 10 }
+      ]
+    },
+
+    {
+      "id": "loot_beast_large",
+      "description": "Drops from cave trolls and large beasts",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "troll_hide", "weight": 7 },
+        { "item_id": "cave_mushroom", "weight": 5 },
+        { "item_id": "silver_coin_pouch", "weight": 4 },
+        { "item_id": "bone_fragment", "weight": 5 },
+        { "item_id": "nothing", "weight": 3 }
+      ]
+    },
+
+    {
+      "id": "loot_skeleton",
+      "description": "Drops from skeleton warriors and zombies",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "bone_fragment", "weight": 8 },
+        { "item_id": "rusty_sword", "weight": 4 },
+        { "item_id": "iron_helm_broken", "weight": 3 },
+        { "item_id": "copper_coin", "weight": 6 },
+        { "item_id": "nothing", "weight": 8 }
+      ]
+    },
+
+    {
+      "id": "loot_armored",
+      "description": "Drops from Animated Knights",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "iron_sword", "weight": 4 },
+        { "item_id": "knight_pauldron", "weight": 4 },
+        { "item_id": "iron_helm_broken", "weight": 4 },
+        { "item_id": "copper_coin", "weight": 5 },
+        { "item_id": "silver_coin_pouch", "weight": 3 },
+        { "item_id": "nothing", "weight": 5 }
+      ]
+    },
+
+    {
+      "id": "loot_undead_minor",
+      "description": "Drops from ghouls and minor undead",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "ghoul_claw", "weight": 6 },
+        { "item_id": "tattered_cloak", "weight": 3 },
+        { "item_id": "copper_coin", "weight": 5 },
+        { "item_id": "bone_fragment", "weight": 5 },
+        { "item_id": "nothing", "weight": 6 }
+      ]
+    },
+
+    {
+      "id": "loot_ooze",
+      "description": "Drops from acidic slimes",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "slime_gel", "weight": 7 },
+        { "item_id": "nothing", "weight": 8 }
+      ]
+    },
+
+    {
+      "id": "loot_stone",
+      "description": "Drops from gargoyles",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "gargoyle_horn", "weight": 6 },
+        { "item_id": "silver_coin_pouch", "weight": 4 },
+        { "item_id": "nothing", "weight": 5 }
+      ]
+    },
+
+    {
+      "id": "loot_ghost",
+      "description": "Drops from wraiths",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "ectoplasm", "weight": 7 },
+        { "item_id": "nothing", "weight": 5 }
+      ]
+    },
+
+    {
+      "id": "loot_shadow",
+      "description": "Drops from shadow stalkers",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "shadow_essence", "weight": 6 },
+        { "item_id": "dark_dagger", "weight": 2 },
+        { "item_id": "nothing", "weight": 4 }
+      ]
+    },
+
+    {
+      "id": "loot_caster",
+      "description": "Drops from dark mages",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "spell_scroll_random", "weight": 5 },
+        { "item_id": "mage_robe_tattered", "weight": 3 },
+        { "item_id": "arcane_focus_cracked", "weight": 4 },
+        { "item_id": "silver_coin_pouch", "weight": 4 },
+        { "item_id": "nothing", "weight": 3 }
+      ]
+    },
+
+    {
+      "id": "loot_boss_minor",
+      "description": "Drops from the Crypt Warden",
+      "rolls": 2,
+      "guaranteed": ["warden_key"],
+      "entries": [
+        { "item_id": "crypt_warden_shield", "weight": 5 },
+        { "item_id": "heavy_mace_ancient", "weight": 5 },
+        { "item_id": "gold_coin_pile", "weight": 6 },
+        { "item_id": "health_potion_major", "weight": 4 }
+      ]
+    },
+
+    {
+      "id": "loot_boss_undead_king",
+      "description": "Drops from the Undead King",
+      "rolls": 3,
+      "guaranteed": ["undead_king_crown", "royal_scepter"],
+      "entries": [
+        { "item_id": "gold_coin_pile", "weight": 8 },
+        { "item_id": "ancient_signet_ring", "weight": 4 },
+        { "item_id": "remove_curse_scroll", "weight": 3 }
+      ]
+    },
+
+    {
+      "id": "loot_chest_minor",
+      "description": "Small chests in tier 1–2 rooms",
+      "rolls": 2,
+      "entries": [
+        { "item_id": "copper_coin", "weight": 10 },
+        { "item_id": "torch", "weight": 8 },
+        { "item_id": "healing_scroll", "weight": 6 },
+        { "item_id": "health_potion_minor", "weight": 6 },
+        { "item_id": "antidote", "weight": 5 },
+        { "item_id": "bone_dagger", "weight": 4 },
+        { "item_id": "leather_vest", "weight": 3 },
+        { "item_id": "cave_mushroom", "weight": 6 },
+        { "item_id": "nothing", "weight": 8 }
+      ]
+    },
+
+    {
+      "id": "loot_chest_standard",
+      "description": "Chests in tier 2–3 rooms",
+      "rolls": [2, 3],
+      "entries": [
+        { "item_id": "silver_coin_pouch", "weight": 7 },
+        { "item_id": "health_potion_standard", "weight": 6 },
+        { "item_id": "iron_sword", "weight": 4 },
+        { "item_id": "knight_pauldron", "weight": 3 },
+        { "item_id": "antidote", "weight": 5 },
+        { "item_id": "holy_water", "weight": 4 },
+        { "item_id": "silver_dagger", "weight": 2 },
+        { "item_id": "spell_scroll_random", "weight": 3 },
+        { "item_id": "tattered_cloak", "weight": 3 },
+        { "item_id": "nothing", "weight": 5 }
+      ]
+    },
+
+    {
+      "id": "loot_chest_rare",
+      "description": "Chests in tier 3–4 rooms and secret rooms",
+      "rolls": [2, 3],
+      "entries": [
+        { "item_id": "gold_coin_pile", "weight": 6 },
+        { "item_id": "health_potion_major", "weight": 4 },
+        { "item_id": "protection_amulet", "weight": 3 },
+        { "item_id": "heavy_mace_ancient", "weight": 2 },
+        { "item_id": "strength_potion", "weight": 4 },
+        { "item_id": "invisibility_potion", "weight": 2 },
+        { "item_id": "dark_dagger", "weight": 1 },
+        { "item_id": "bomb_fire", "weight": 3 },
+        { "item_id": "mage_robe_tattered", "weight": 2 },
+        { "item_id": "remove_curse_scroll", "weight": 2 }
+      ]
+    },
+
+    {
+      "id": "loot_chest_legendary",
+      "description": "The treasure vault — endgame loot",
+      "rolls": 5,
+      "guaranteed": ["gold_coin_pile", "gold_coin_pile"],
+      "entries": [
+        { "item_id": "royal_scepter", "weight": 5 },
+        { "item_id": "ancient_signet_ring", "weight": 5 },
+        { "item_id": "undead_king_crown", "weight": 4 },
+        { "item_id": "heavy_mace_ancient", "weight": 4 },
+        { "item_id": "crypt_warden_shield", "weight": 4 },
+        { "item_id": "health_potion_major", "weight": 5 },
+        { "item_id": "remove_curse_scroll", "weight": 4 },
+        { "item_id": "gold_coin_pile", "weight": 8 }
+      ]
+    },
+
+    {
+      "id": "loot_floor_tier1",
+      "description": "Items found lying on floors of tier 1 rooms",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "copper_coin", "weight": 10 },
+        { "item_id": "rusty_sword", "weight": 5 },
+        { "item_id": "torch", "weight": 8 },
+        { "item_id": "bone_fragment", "weight": 7 },
+        { "item_id": "rat_pelt", "weight": 4 },
+        { "item_id": "cave_mushroom", "weight": 5 },
+        { "item_id": "nothing", "weight": 18 }
+      ]
+    },
+
+    {
+      "id": "loot_floor_tier2",
+      "description": "Items found lying on floors of tier 2 rooms",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "copper_coin", "weight": 8 },
+        { "item_id": "silver_coin_pouch", "weight": 4 },
+        { "item_id": "health_potion_minor", "weight": 5 },
+        { "item_id": "antidote", "weight": 4 },
+        { "item_id": "iron_helm_broken", "weight": 3 },
+        { "item_id": "tattered_cloak", "weight": 3 },
+        { "item_id": "cave_mushroom", "weight": 4 },
+        { "item_id": "nothing", "weight": 14 }
+      ]
+    },
+
+    {
+      "id": "loot_floor_tier3",
+      "description": "Items found lying on floors of tier 3 rooms",
+      "rolls": 1,
+      "entries": [
+        { "item_id": "silver_coin_pouch", "weight": 5 },
+        { "item_id": "health_potion_standard", "weight": 4 },
+        { "item_id": "ghoul_claw", "weight": 3 },
+        { "item_id": "ectoplasm", "weight": 2 },
+        { "item_id": "arcane_focus_cracked", "weight": 2 },
+        { "item_id": "bomb_fire", "weight": 2 },
+        { "item_id": "nothing", "weight": 10 }
+      ]
+    },
+
+    {
+      "id": "loot_scroll_pool",
+      "description": "Scrolls found in the library",
+      "rolls": [1, 2],
+      "entries": [
+        { "item_id": "healing_scroll", "weight": 7 },
+        { "item_id": "spell_scroll_random", "weight": 5 },
+        { "item_id": "remove_curse_scroll", "weight": 2 },
+        { "item_id": "lore_fragment", "weight": 8 },
+        { "item_id": "nothing", "weight": 4 }
+      ]
+    },
+
+    {
+      "id": "loot_alchemical_materials",
+      "description": "Materials found in the alchemist's lab",
+      "rolls": [2, 3],
+      "entries": [
+        { "item_id": "slime_gel", "weight": 5 },
+        { "item_id": "spider_venom_sac", "weight": 4 },
+        { "item_id": "cave_mushroom", "weight": 6 },
+        { "item_id": "arcane_focus_cracked", "weight": 3 },
+        { "item_id": "ectoplasm", "weight": 2 },
+        { "item_id": "bomb_fire", "weight": 3 }
+      ]
+    }
+  ]
+}

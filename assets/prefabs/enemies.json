@@ -1,0 +1,588 @@
+{
+  "_meta": {
+    "file": "enemies.json",
+    "description": "All enemy definitions. Each enemy has a complete physical description, combat behavior, attack/death text, and drop references. Tiers 1–5 match room tiers.",
+    "fields": {
+      "id": "Unique enemy identifier",
+      "name": "Display name",
+      "tier": "1–5 difficulty tier",
+      "tags": "Used for filtering by room type, loot tables, and damage bonuses",
+      "weight": "Spawn probability weight — higher is more common",
+      "description": "What the player sees when the enemy is first encountered",
+      "on_first_sight": "Flavor text when enemy is first spotted in the room",
+      "on_death": "Flavor text displayed when the enemy dies",
+      "hp": "Base hit points",
+      "damage": "Base damage per attack",
+      "defense": "Damage reduction from attacks",
+      "xp": "Experience points awarded on death",
+      "speed": "slow | normal | fast — affects turn order",
+      "resistances": "Damage types that deal half damage",
+      "immunities": "Damage types that deal no damage",
+      "weaknesses": "Damage types that deal double damage",
+      "status_on_hit": "Status effect applied to the player on a successful hit",
+      "special_abilities": "Named abilities with full descriptions and mechanics",
+      "phases": "Boss-only — behavior changes at HP thresholds",
+      "loot": "References to loot_tables.json table ID",
+      "behavior": "AI pattern: aggressive | defensive | patrol | ambush | ranged | summoner"
+    }
+  },
+  "enemies": [
+    {
+      "id": "giant_rat",
+      "name": "Giant Rat",
+      "tier": 1,
+      "tags": ["beast", "vermin", "common"],
+      "weight": 12,
+      "behavior": "aggressive",
+      "description": "A rat the size of a large cat, its grey-brown fur matted and damp. Its hindquarters twitch constantly, coiled with energy it cannot contain. The red eyes do not blink. The incisors are yellowed and long and slightly offset, one longer than the other, from years of gnawing stone.",
+      "on_first_sight": "A shape darts from the shadow of the wall — faster than expected for something its size. It stops a few feet away, hindquarters raised, staring.",
+      "on_death": "It curls inward with a short, sharp squeak and goes still. The tail flicks once and does not move again.",
+      "hp": 8,
+      "damage": 3,
+      "defense": 0,
+      "xp": 5,
+      "speed": "fast",
+      "resistances": [],
+      "immunities": [],
+      "weaknesses": [],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "pack_aggression",
+          "name": "Pack Aggression",
+          "description": "If two or more Giant Rats are present in the same room, each gains +2 damage. They attack the same target simultaneously."
+        }
+      ],
+      "loot": "loot_vermin"
+    },
+    {
+      "id": "giant_rat_pack",
+      "name": "Rat Pack",
+      "tier": 1,
+      "tags": ["beast", "vermin", "swarm", "common"],
+      "weight": 6,
+      "behavior": "aggressive",
+      "description": "Not one rat but a dozen, moving in a coordinated mass across the floor. They pour around obstacles without slowing, communicating in a constant chittering that reverberates off the stone walls. Individually, none of them is remarkable. Together they are something else.",
+      "on_first_sight": "The floor ahead seems to ripple — then the ripple resolves into movement, dozens of small bodies flowing toward you in a wave.",
+      "on_death": "The mass breaks apart. Some scatter into the walls. Most go still. The chittering dies all at once.",
+      "hp": 25,
+      "damage": 2,
+      "defense": 0,
+      "xp": 20,
+      "speed": "fast",
+      "resistances": [],
+      "immunities": [],
+      "weaknesses": ["fire", "aoe"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "swarm",
+          "name": "Swarm",
+          "description": "The Rat Pack ignores defense values and deals its base damage directly. AoE attacks deal double damage against it."
+        },
+        {
+          "id": "overwhelm",
+          "name": "Overwhelm",
+          "description": "On hit, the player must pass an Agility check (DC 10) or be knocked prone, losing their next action."
+        }
+      ],
+      "loot": "loot_vermin"
+    },
+    {
+      "id": "cave_spider",
+      "name": "Cave Spider",
+      "tier": 1,
+      "tags": ["beast", "poison", "common"],
+      "weight": 10,
+      "behavior": "ambush",
+      "description": "Pale and large — body the size of a closed fist, legs spanning wider than a handspan. The abdomen is distended with venom. It moves in short, precise bursts, stopping at intervals to assess. The eyes are simple and do not reflect light. It has learned to wait in ceiling corners where torchlight does not reach.",
+      "on_first_sight": "Something drops from the ceiling and lands without sound a step ahead of you. It is not small.",
+      "on_death": "It folds up, legs curling inward over its body, and rolls to the floor.",
+      "hp": 10,
+      "damage": 4,
+      "defense": 0,
+      "xp": 8,
+      "speed": "normal",
+      "resistances": [],
+      "immunities": [],
+      "weaknesses": ["fire"],
+      "status_on_hit": {
+        "effect": "poisoned",
+        "chance": 0.35,
+        "damage_per_turn": 2,
+        "duration_turns": 3,
+        "description": "Venom seeps into the wound. For the next 3 turns, take 2 damage at the start of your turn."
+      },
+      "special_abilities": [
+        {
+          "id": "ceiling_drop",
+          "name": "Ceiling Drop",
+          "description": "At the start of combat, if not yet detected, the Cave Spider attacks first regardless of initiative and deals double damage on this opening strike."
+        },
+        {
+          "id": "web_shot",
+          "name": "Web Shot",
+          "description": "Once per combat: The spider fires a web. Player makes Agility check (DC 12). On failure, movement is halved for 2 turns."
+        }
+      ],
+      "loot": "loot_beast_small"
+    },
+    {
+      "id": "skeleton_warrior",
+      "name": "Skeleton Warrior",
+      "tier": 2,
+      "tags": ["undead", "melee", "common"],
+      "weight": 10,
+      "behavior": "aggressive",
+      "description": "Bones held together by something that is not sinew — something invisible but deliberate. The skeleton moves with mechanical consistency, each motion exact and unhurried. It carries a corroded short sword in one hand and the rusted remnants of a buckler in the other. The jaw is wired shut. The eye sockets hold two points of cold blue light that track you without moving.",
+      "on_first_sight": "The slumped figure in the corner stirs. Bones settle into posture. Two cold lights appear where eyes would be.",
+      "on_death": "The animating force leaves all at once. The skeleton collapses mid-motion, bones scattering across the floor in a dry clatter. The blue lights go out.",
+      "hp": 18,
+      "damage": 6,
+      "defense": 2,
+      "xp": 15,
+      "speed": "normal",
+      "resistances": ["poison", "bleed", "cold"],
+      "immunities": [],
+      "weaknesses": ["blunt", "holy"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "undying_resolve",
+          "name": "Undying Resolve",
+          "description": "When reduced to 0 HP by slashing or piercing damage, the Skeleton Warrior has a 25% chance to continue fighting at 3 HP. Does not trigger against blunt or holy damage."
+        }
+      ],
+      "loot": "loot_skeleton"
+    },
+    {
+      "id": "zombie",
+      "name": "Zombie",
+      "tier": 2,
+      "tags": ["undead", "slow", "common"],
+      "weight": 8,
+      "behavior": "aggressive",
+      "description": "A human body in advanced decay, moving with the particular deliberateness of something that no longer feels exhaustion. The skin is grey-green and splitting at the joints. The jaw hangs at a wrong angle. It does not appear to see in any conventional sense — it navigates by sound and smell, head swaying, following you with a persistence that patience cannot outlast.",
+      "on_first_sight": "A sound like wet gravel. The shape around the corner is upright but wrong — the proportions are off in ways you notice before you can name.",
+      "on_death": "It goes down slowly, like a tree falling. Even after it hits the floor, limbs continue moving for a moment.",
+      "hp": 28,
+      "damage": 7,
+      "defense": 1,
+      "xp": 12,
+      "speed": "slow",
+      "resistances": ["bleed", "cold"],
+      "immunities": ["poison", "fear"],
+      "weaknesses": ["fire", "holy"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "reanimate",
+          "name": "Reanimate",
+          "description": "When reduced to 0 HP by non-fire, non-holy damage, the Zombie rises again at the start of the next turn with 8 HP. This can happen once per combat."
+        },
+        {
+          "id": "grip",
+          "name": "Grip",
+          "description": "On a successful hit, the player must pass a Strength check (DC 11) or be grappled, preventing movement until they break free (Strength DC 11 on their turn)."
+        }
+      ],
+      "loot": "loot_skeleton"
+    },
+    {
+      "id": "animated_knight",
+      "name": "Animated Knight",
+      "tier": 2,
+      "tags": ["undead", "armored", "melee"],
+      "weight": 5,
+      "behavior": "patrol",
+      "description": "Full plate armor, standing seven feet tall in the corner. The visor is down. There is nothing inside — no body, no skeleton — only the armor itself, animated by a compulsion it cannot articulate and did not ask for. It moves with the memory of a soldier: precise steps, measured posture, weapon raised correctly. The helmet turns slowly toward you. The hollow inside the visor is not dark. It is a cold, flat silver.",
+      "on_first_sight": "The armor in the corner moves. The helmet turns. There is no one wearing it, but it turns toward you.",
+      "on_death": "The plate crashes to the floor all at once, as if strings were cut. The silver light behind the visor goes out. The armor is just armor now.",
+      "hp": 32,
+      "damage": 8,
+      "defense": 6,
+      "xp": 35,
+      "speed": "normal",
+      "resistances": ["bleed", "poison", "cold"],
+      "immunities": ["fear"],
+      "weaknesses": ["blunt", "holy"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "shield_wall",
+          "name": "Shield Wall",
+          "description": "Once per combat, as a reaction to being hit, the Animated Knight raises its shield and reduces the incoming damage to 0. Recharges on a roll of 5–6 after each subsequent hit."
+        },
+        {
+          "id": "patrol_awareness",
+          "name": "Patrol Pattern",
+          "description": "The Animated Knight follows a fixed patrol route. Detected at range 4. Stealth check (DC 14) to bypass without combat."
+        }
+      ],
+      "loot": "loot_armored"
+    },
+    {
+      "id": "ghoul",
+      "name": "Ghoul",
+      "tier": 3,
+      "tags": ["undead", "fast", "melee"],
+      "weight": 6,
+      "behavior": "aggressive",
+      "description": "Pale and thin beyond emaciation, the skin drawn tight over a frame that has been reshaped by whatever animates it — shoulders too wide, fingers too long, spine curved into a permanent crouch. It moves on all four limbs or two with no preference, covering ground with a speed that is deeply wrong. The eyes glow a steady amber. The mouth is open and does not close.",
+      "on_first_sight": "The sarcophagus lid shifts. Something white and fast hauls itself over the edge. It sees you before it is fully upright.",
+      "on_death": "It crumbles. Not to pieces but to dust — as if it were always ash and the animation was all that held it together. The amber light extinguishes.",
+      "hp": 22,
+      "damage": 12,
+      "defense": 1,
+      "xp": 40,
+      "speed": "fast",
+      "resistances": ["cold"],
+      "immunities": ["poison"],
+      "weaknesses": ["holy", "fire"],
+      "status_on_hit": {
+        "effect": "paralyzed",
+        "chance": 0.25,
+        "duration_turns": 1,
+        "description": "The ghoul's bite carries a numbing agent from the grave. On a failed Constitution check (DC 13), the player loses their next action."
+      },
+      "special_abilities": [
+        {
+          "id": "feast",
+          "name": "Feast",
+          "description": "If the player is paralyzed, the Ghoul attacks twice that turn instead of once."
+        },
+        {
+          "id": "wall_climb",
+          "name": "Wall Climb",
+          "description": "The Ghoul can climb walls and ceilings. It may drop from above to begin combat with its Ceiling Drop — identical in effect to the Cave Spider's ability, dealing double damage on the opening hit."
+        }
+      ],
+      "loot": "loot_undead_minor"
+    },
+    {
+      "id": "cave_troll",
+      "name": "Cave Troll",
+      "tier": 3,
+      "tags": ["beast", "large", "melee", "regenerating"],
+      "weight": 3,
+      "behavior": "aggressive",
+      "description": "Eight feet of grey-green bulk, knuckles dragging on the floor as it walks. The skin is thick and warty and already healing — a cut on its forearm is visibly closing. The nose is enormous and primary: it found you by smell before you found it. The eyes are small and set deep under a heavy brow. It carries no weapon because it does not need one. Its hands are the size of small shields.",
+      "on_first_sight": "Something ahead stops moving. Then you hear it inhale. Then you see it, and it sees you, and it lurches forward with a sound like gravel in a barrel.",
+      "on_death": "It crashes forward and the floor shakes with the impact. The smell of it is overwhelming up close. It continues trying to rise for two full turns before it cannot.",
+      "hp": 58,
+      "damage": 14,
+      "defense": 4,
+      "xp": 65,
+      "speed": "slow",
+      "resistances": ["blunt", "cold"],
+      "immunities": [],
+      "weaknesses": ["fire", "acid"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "regeneration",
+          "name": "Regeneration",
+          "description": "At the end of each turn, the Cave Troll regains 4 HP. This does not trigger on any turn where it took fire or acid damage."
+        },
+        {
+          "id": "hurl_debris",
+          "name": "Hurl Debris",
+          "description": "Once every 3 turns: The Troll tears a chunk from the wall and throws it. Ranged attack, 18 damage. Player may dodge with Agility check DC 13."
+        },
+        {
+          "id": "ground_slam",
+          "name": "Ground Slam",
+          "description": "Once per combat: The Troll slams both fists into the floor. All players in the room are knocked prone (Strength DC 14 to resist) and take 10 damage."
+        }
+      ],
+      "loot": "loot_beast_large"
+    },
+    {
+      "id": "gargoyle",
+      "name": "Gargoyle",
+      "tier": 3,
+      "tags": ["stone", "flying", "ambush"],
+      "weight": 4,
+      "behavior": "ambush",
+      "description": "It crouches on a ledge above the door, wings folded, head bowed — every detail correct for carved stone. The claws are gripping the ledge with actual pressure, but this too looks like sculpture. The surface is rough limestone and catches the torchlight like masonry. Only the eyes are wrong: they are too smooth, too absent of the small imperfections of carving. When it moves, it moves instantly — there is no wind-up.",
+      "on_first_sight": "You've been looking at it for thirty seconds before it blinks. Then it unfolds.",
+      "on_death": "The animation leaves in pieces — one wing goes limp, then the other, then the body pitches forward and shatters on the floor into shards of grey stone.",
+      "hp": 42,
+      "damage": 11,
+      "defense": 7,
+      "xp": 55,
+      "speed": "fast",
+      "resistances": ["bleed", "poison", "cold"],
+      "immunities": [],
+      "weaknesses": ["blunt", "magic"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "stone_disguise",
+          "name": "Stone Disguise",
+          "description": "Begins combat appearing as a statue. Player makes Perception check (DC 13) on entering the room. On failure, the Gargoyle attacks first at double damage before initiative is rolled."
+        },
+        {
+          "id": "dive_attack",
+          "name": "Dive Attack",
+          "description": "Every other turn, the Gargoyle rises to the ceiling and dives. This attack deals 15 damage and ignores 3 points of defense. Agility check (DC 14) to halve damage."
+        }
+      ],
+      "loot": "loot_stone"
+    },
+    {
+      "id": "slime",
+      "name": "Acidic Slime",
+      "tier": 2,
+      "tags": ["ooze", "acid", "common"],
+      "weight": 5,
+      "behavior": "aggressive",
+      "description": "A mass of translucent yellowish gel about three feet across, moving with a wet rolling motion that leaves a faint acid trail on the stone. The surface bubbles slowly. There is no face, no limb, no organ visible, but it navigates directly toward heat and motion. Up close, the smell is sharp and chemical. The floor beneath its trail is lightly etched.",
+      "on_first_sight": "Something wet moves across the floor toward you. It is neither plant nor animal. It continues moving.",
+      "on_death": "It flattens and dissolves, leaving a wide puddle of mildly caustic gel that steams faintly for a minute before going inert.",
+      "hp": 22,
+      "damage": 7,
+      "defense": 0,
+      "xp": 20,
+      "speed": "slow",
+      "resistances": ["blunt", "bleed", "cold"],
+      "immunities": ["poison", "acid"],
+      "weaknesses": ["fire"],
+      "status_on_hit": {
+        "effect": "acid_burn",
+        "chance": 0.4,
+        "damage_per_turn": 3,
+        "duration_turns": 2,
+        "description": "Acid clings to the wound. Take 3 damage per turn for 2 turns. Armor defense is reduced by 1 until repaired."
+      },
+      "special_abilities": [
+        {
+          "id": "split",
+          "name": "Split",
+          "description": "When killed by physical (non-fire, non-acid) damage, the Slime splits into two Small Slimes: HP 6, damage 3, same immunities and weaknesses. Small Slimes do not split."
+        },
+        {
+          "id": "engulf",
+          "name": "Engulf",
+          "description": "Once per combat, the Slime attempts to engulf the player's weapon arm. Strength check (DC 12). On failure, the player cannot use their weapon next turn and takes 5 acid damage."
+        }
+      ],
+      "loot": "loot_ooze"
+    },
+    {
+      "id": "wraith",
+      "name": "Wraith",
+      "tier": 4,
+      "tags": ["undead", "ghost", "magic"],
+      "weight": 3,
+      "behavior": "aggressive",
+      "description": "A translucent human silhouette, detail-less except for hands that are defined with precision — long, reaching, the only parts of it that are fully present. It drifts rather than walks, passing through furniture and walls without interaction, but its hands cannot pass through living flesh. Where it moves, the temperature drops and the torches dim. It does not appear to breathe or to need to.",
+      "on_first_sight": "The wall at the back of the room becomes briefly transparent, and something passes through it. It orients toward you without eyes.",
+      "on_death": "It fragments from the edges inward, dissolving into threads of mist that darken and then vanish. The temperature returns to normal within seconds.",
+      "hp": 36,
+      "damage": 16,
+      "defense": 0,
+      "xp": 85,
+      "speed": "normal",
+      "resistances": [],
+      "immunities": ["bleed", "poison", "physical_basic"],
+      "weaknesses": ["holy", "fire", "silver"],
+      "status_on_hit": {
+        "effect": "max_hp_drain",
+        "chance": 0.40,
+        "amount": 3,
+        "description": "The Wraith's touch draws vitality directly. On a failed Constitution check (DC 14), the player's maximum HP is reduced by 3 until they rest. Stacks up to 3 times."
+      },
+      "special_abilities": [
+        {
+          "id": "incorporeal",
+          "name": "Incorporeal",
+          "description": "Standard physical attacks deal half damage. Magical, holy, silver, and fire damage are unaffected."
+        },
+        {
+          "id": "wail",
+          "name": "Death Wail",
+          "description": "Once per combat, when reduced below half HP: The Wraith releases a wail. All players in the room make Willpower check (DC 14). On failure: frightened for 2 turns, -3 to all checks."
+        }
+      ],
+      "loot": "loot_ghost"
+    },
+    {
+      "id": "dark_mage",
+      "name": "Dark Mage",
+      "tier": 4,
+      "tags": ["human", "magic", "ranged", "caster"],
+      "weight": 3,
+      "behavior": "ranged",
+      "description": "A human figure in a deep-hooded robe of dark cloth, once fine, now fraying at every edge. The hands visible at the robe's hem are wrong — the skin is grey and the veins stand out black. Dark energy pulses between the fingertips in small arcs, constant and involuntary. The face under the cowl is not visible from any angle, as if the hood contains more darkness than should geometrically fit inside it.",
+      "on_first_sight": "A figure at the far end of the room raises its head. The hood shifts. The darkness inside shifts with it.",
+      "on_death": "The robe collapses without weight, without body, as if whatever was wearing it was never solid. The hood falls back. There is nothing inside. The dark energy dissipates slowly.",
+      "hp": 30,
+      "damage": 18,
+      "defense": 1,
+      "xp": 95,
+      "speed": "normal",
+      "resistances": ["magic"],
+      "immunities": [],
+      "weaknesses": ["holy"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "necrotic_bolt",
+          "name": "Necrotic Bolt",
+          "description": "Primary attack. Ranged. Deals 18 necrotic damage. Heals the Dark Mage for 5 HP on hit."
+        },
+        {
+          "id": "curse",
+          "name": "Hex",
+          "description": "Once every 4 turns: Targets the player with a hex. Willpower check (DC 15). On failure: player's damage is halved for 3 turns."
+        },
+        {
+          "id": "blink",
+          "name": "Blink",
+          "description": "When a melee attack hits: 50% chance to teleport to a random point in the room and immediately cast Necrotic Bolt."
+        }
+      ],
+      "loot": "loot_caster"
+    },
+    {
+      "id": "shadow_stalker",
+      "name": "Shadow Stalker",
+      "tier": 4,
+      "tags": ["shadow", "assassin", "ambush"],
+      "weight": 2,
+      "behavior": "ambush",
+      "description": "A humanoid form constructed entirely from shadow — not a creature that dwells in shadow, but a creature made of it. It has no features except negative space. The outline shifts slightly at the edges, never quite holding still. In darkness it is essentially invisible. In torchlight, it is a silhouette without a source. It communicates in no way before it acts.",
+      "on_first_sight": "Your shadow stretches toward you from the wrong direction. Then it detaches.",
+      "on_death": "It screams without sound — the effect is pressure, not noise. It collapses into a spreading pool of darkness across the floor, which fades over thirty seconds until the flagstone is normal stone again.",
+      "hp": 32,
+      "damage": 20,
+      "defense": 2,
+      "xp": 105,
+      "speed": "fast",
+      "resistances": ["cold"],
+      "immunities": ["bleed", "poison"],
+      "weaknesses": ["light", "holy", "fire"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "first_strike",
+          "name": "Opening Strike",
+          "description": "The Shadow Stalker's first attack of any combat is an automatic critical hit, dealing double damage. This occurs before initiative if the player has not detected it."
+        },
+        {
+          "id": "invisibility",
+          "name": "Shadow Merge",
+          "description": "In darkness or dim light, the Shadow Stalker is invisible. In torchlight, it has advantage on stealth and can only be detected on a Perception check DC 16."
+        },
+        {
+          "id": "shadow_step",
+          "name": "Shadow Step",
+          "description": "Once per combat: The Stalker teleports to any shadowed location in the room. Cannot be used while in full light."
+        }
+      ],
+      "loot": "loot_shadow"
+    },
+    {
+      "id": "crypt_warden",
+      "name": "Crypt Warden",
+      "tier": 4,
+      "tags": ["undead", "armored", "melee", "boss_minor"],
+      "weight": 2,
+      "behavior": "defensive",
+      "description": "A figure that was once a man, now something more and less than that. Eight feet tall in armor that has been welded shut — no buckles, no clasps, no visible way to remove it. A chain, thick as a wrist, connects the armor's collar ring to a bolt in the wall. The chain is severed. The stump of it drags behind the Warden as it moves. The helmet is a closed iron box with a narrow horizontal slit. The slit does not show eyes. It shows movement.",
+      "on_first_sight": "The chain snaps taut, then the anchor bolt tears free from the wall. The chain falls to the floor. The Crypt Warden steps forward.",
+      "on_death": "It does not fall so much as cease. The animation withdraws, and eight feet of iron and sealed bone crash forward. The stone floor fractures where it lands.",
+      "hp": 55,
+      "damage": 14,
+      "defense": 10,
+      "xp": 130,
+      "speed": "slow",
+      "resistances": ["bleed", "poison", "cold", "fire"],
+      "immunities": ["fear"],
+      "weaknesses": ["holy", "blunt"],
+      "status_on_hit": null,
+      "special_abilities": [
+        {
+          "id": "heavy_blow",
+          "name": "Heavy Blow",
+          "description": "Every third attack, the Warden winds up and delivers a crushing strike: 25 damage and knocks the player back 10 feet (or into a wall for +5 damage). Strength check (DC 15) to halve and avoid knockback."
+        },
+        {
+          "id": "shield_rush",
+          "name": "Shield Rush",
+          "description": "Once per combat: The Warden charges in a straight line. All targets in the path take 18 damage and are knocked prone. Agility check (DC 14) to sidestep."
+        },
+        {
+          "id": "iron_will",
+          "name": "Iron Will",
+          "description": "The Crypt Warden cannot be stunned, paralyzed, or feared."
+        }
+      ],
+      "loot": "loot_boss_minor"
+    },
+    {
+      "id": "undead_king",
+      "name": "Undead King",
+      "tier": 5,
+      "tags": ["undead", "boss", "magic", "melee", "unique"],
+      "weight": 1,
+      "behavior": "aggressive",
+      "description": "The thing on the throne was a king. The bones are still regal — tall, straight, the posture of command maintained through centuries of death. The ceremonial armor is green with age but has not fallen apart. The crown sits on the skull at a slight angle, its jewels replaced at some point with dark gems that emit a cold and sickly phosphorescence. The hands on the armrests are skeletal but intact, every finger present. When it moves, it moves with purpose. It does not rage. It is not frenzied. It is deliberate, and it is looking at you the way something looks at an obstacle it has already decided to remove.",
+      "on_first_sight": "The braziers ignite one by one from the back of the hall to the front. By the time you reach the center, you are fully lit and the figure on the throne has its head raised. A crown pulses with a cold, greenish light. The figure rises.",
+      "on_death": "The crown shatters — not from a blow, but from within, as if something inside it has finally died. The Undead King stands for one moment without the crown's light. Then it collapses, bone by bone, each piece settling until what remains is an arrangement on the floor that was once a person. The hall goes dark. The braziers die. The cold retreats.",
+      "hp": 65,
+      "damage": 15,
+      "defense": 6,
+      "xp": 300,
+      "speed": "normal",
+      "resistances": ["cold", "bleed"],
+      "immunities": ["poison", "fear", "paralysis"],
+      "weaknesses": ["holy", "fire"],
+      "status_on_hit": {
+        "effect": "cursed",
+        "chance": 0.3,
+        "description": "The King's strikes carry the rot of the grave. On a failed Willpower check (DC 15), the player is cursed: healing effects are halved for 5 turns."
+      },
+      "phases": [
+        {
+          "phase": 1,
+          "hp_range": "65–34",
+          "name": "The King Awakens",
+          "behavior": "The Undead King fights with deliberate melee strikes, occasionally using Grave Slam. Passive: Cursed Crown aura (-5 max HP to player while in room).",
+          "abilities_active": ["grave_slam", "cursed_crown"]
+        },
+        {
+          "phase": 2,
+          "hp_range": "33–1",
+          "name": "The Throne Remembers",
+          "behavior": "Transition: The King raises its arms. Two Skeleton Warriors animate from bones near the throne. The King begins using Edict of Silence and its attacks carry the cursed status at double chance (60%). Movement speed increases.",
+          "abilities_active": ["grave_slam", "cursed_crown", "summon_guard", "edict_of_silence"]
+        }
+      ],
+      "special_abilities": [
+        {
+          "id": "cursed_crown",
+          "name": "Cursed Crown",
+          "description": "Passive. While the Undead King is alive in this room, the player's maximum HP is reduced by 5. This reduction is removed immediately on the King's death."
+        },
+        {
+          "id": "grave_slam",
+          "name": "Grave Slam",
+          "description": "Every 3 turns: The King drives its scepter into the floor. A shockwave of dark force radiates outward — 20 necrotic damage in a 15-foot radius. Agility check (DC 14) to halve. Ignores defense."
+        },
+        {
+          "id": "summon_guard",
+          "name": "Summon the Guard",
+          "description": "Phase 2 only, triggers once at 33 HP. Animates 2 Skeleton Warriors from the bones near the throne. They act on the King's initiative."
+        },
+        {
+          "id": "edict_of_silence",
+          "name": "Edict of Silence",
+          "description": "Phase 2 only, once every 4 turns. The King speaks a command in an ancient language. Willpower check (DC 16). On failure: the player cannot use consumable items for 3 turns."
+        }
+      ],
+      "loot": "loot_boss_undead_king"
+    }
+  ]
+}

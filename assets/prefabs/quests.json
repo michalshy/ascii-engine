@@ -1,0 +1,278 @@
+{
+  "_meta": {
+    "file": "quests.json",
+    "description": "All quest definitions. Quests track objectives and are advanced by interactions with NPCs, rooms, and enemies. Each quest has a full narrative description and deterministic objectives.",
+    "fields": {
+      "id": "Unique quest identifier",
+      "name": "Display name",
+      "type": "main | side | exploration | escort",
+      "giver_npc": "NPC ID that starts the quest, or null if auto-started",
+      "auto_start": "If true, quest begins when player enters the dungeon",
+      "description": "What the player is told about the quest when it starts",
+      "lore": "Background context shown in the quest journal",
+      "objectives": "Ordered list of objectives with completion conditions",
+      "rewards": "What the player receives on completion",
+      "fail_conditions": "If any, conditions that permanently fail the quest"
+    }
+  },
+  "quests": [
+    {
+      "id": "quest_undead_king",
+      "name": "The Binding of the Crown",
+      "type": "main",
+      "giver_npc": null,
+      "auto_start": true,
+      "description": "There is an Undead King in the dungeon below. Beyond him is a vault. You are going in.",
+      "lore": "Three hundred years ago, a king died — or should have. His court mage, working under instruction from an entity recorded only as 'the permanence,' bound the king's death into his crown. The king did not die. He did not live. He sits on his throne in a dungeon that has become his, presiding over an army of soldiers who also could not die while the binding holds. The vault behind the throne contains his treasury and records. He cannot open it — the vault was sealed against the crown. He has been trying to reach it for three hundred years.",
+      "objectives": [
+        {
+          "id": "obj_enter",
+          "description": "Enter the dungeon.",
+          "completion_trigger": "player_enters_dungeon",
+          "journal_entry": "You've entered. The gate is behind you. The Old Guardian was not encouraging."
+        },
+        {
+          "id": "obj_learn_weakness",
+          "description": "Learn the nature of the Undead King's binding.",
+          "completion_triggers": ["talk_to_npc_mad_scholar_about_king", "talk_to_npc_ghost_soldier_about_king", "complete_event_ritual_activation"],
+          "any_of": true,
+          "journal_entry": "The crown is the seat of the binding. Destroy the crown and the binding releases. The king will not survive without it. Holy or fire damage on the crown itself, once he's sufficiently weakened."
+        },
+        {
+          "id": "obj_get_vault_access",
+          "description": "Obtain access to the Treasure Vault — either the Warden's Key or the Royal Signet Ring.",
+          "completion_triggers": ["item_warden_key_in_inventory", "item_ancient_signet_ring_in_inventory"],
+          "any_of": true,
+          "journal_entry": "The vault has two ways in. The Warden's Key is in the crypt. The Royal Signet Ring is with the Oracle, in the secret places of the dungeon."
+        },
+        {
+          "id": "obj_defeat_king",
+          "description": "Defeat the Undead King and destroy his crown.",
+          "completion_trigger": "enemy_undead_king_defeated",
+          "journal_entry": "The crown shattered. The king fell. The hall went dark. The army of the dead — wherever they are in this dungeon — has gone still."
+        },
+        {
+          "id": "obj_open_vault",
+          "description": "Open the Treasure Vault.",
+          "completion_trigger": "room_treasure_vault_entered",
+          "journal_entry": "The vault is open. There's someone's journal here, addressed to whoever came next. You've done what they couldn't."
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "items": ["undead_king_crown", "royal_scepter"],
+        "unlock": "Treasure Vault content accessible",
+        "narrative": "The dungeon becomes simply a place. The soldiers rest. The Oracle, wherever it is, is satisfied. You leave with more than you came with."
+      },
+      "fail_conditions": []
+    },
+    {
+      "id": "quest_merchant_escort",
+      "name": "A Fair Price for Safe Passage",
+      "type": "escort",
+      "giver_npc": "npc_trapped_merchant",
+      "auto_start": false,
+      "description": "The merchant in the well chamber needs to get out. There are at least two Animated Knights between here and the entrance. Clear the path and come back.",
+      "lore": "The merchant came down for reasons that made more sense at the time. Their map of the upper section is accurate and worth having. They've been waiting in the well chamber long enough to reorganize their stock twice.",
+      "objectives": [
+        {
+          "id": "obj_accept",
+          "description": "Agree to escort the merchant.",
+          "completion_trigger": "dialogue_option_offer_escort_selected",
+          "journal_entry": "The merchant will wait. Clear the Animated Knights from the torch hall and the guard room, then come back."
+        },
+        {
+          "id": "obj_clear_path",
+          "description": "Clear all enemies from the path between the well chamber and the entrance.",
+          "completion_trigger": "rooms_torch_hall_and_guard_room_cleared",
+          "journal_entry": "The path is clear. Go back for the merchant."
+        },
+        {
+          "id": "obj_return",
+          "description": "Return to the merchant and escort them to the entrance.",
+          "completion_trigger": "npc_trapped_merchant_escorted_to_entrance",
+          "journal_entry": "The merchant is out. They handed over the goods as promised and moved off quickly toward the light."
+        }
+      ],
+      "rewards": {
+        "xp": 120,
+        "items": ["arcane_focus_cracked"],
+        "gold": 80,
+        "merchant_discount": "If merchant shop persists in future dungeon runs, 20% discount.",
+        "narrative": "The merchant makes it out with their pack and their dignity intact. They leave quickly, which you understand."
+      },
+      "fail_conditions": [
+        {
+          "condition": "npc_trapped_merchant_killed",
+          "description": "The merchant dies to an enemy while unescorted. Quest fails. Rewards lost."
+        }
+      ]
+    },
+    {
+      "id": "quest_survivor_escort",
+      "name": "Get Someone Out",
+      "type": "escort",
+      "giver_npc": "npc_desperate_survivor",
+      "auto_start": false,
+      "description": "There's a survivor in a dead-end corner. They cannot get past the Animated Knight in the corridor. They're scared and running out of supplies. Get them out.",
+      "lore": "They came with a group. The group is not together anymore. The survivor will not say what happened to the others, and the way they don't say it tells you enough.",
+      "objectives": [
+        {
+          "id": "obj_find_survivor",
+          "description": "Find the surviving explorer.",
+          "completion_trigger": "npc_desperate_survivor_met",
+          "journal_entry": "There's a survivor in one of the dead-end rooms. Scared, contained, out of ideas."
+        },
+        {
+          "id": "obj_clear_route",
+          "description": "Remove the Animated Knight blocking the exit route.",
+          "completion_trigger": "enemy_animated_knight_in_blocking_position_defeated",
+          "journal_entry": "The route is clear. Go back for the survivor."
+        },
+        {
+          "id": "obj_escort_out",
+          "description": "Walk the survivor to the entrance.",
+          "completion_trigger": "npc_desperate_survivor_exits_dungeon",
+          "journal_entry": "They got out. They didn't say much at the gate — just kept walking. That's fine."
+        }
+      ],
+      "rewards": {
+        "xp": 80,
+        "items": [],
+        "gold": 30,
+        "narrative": "The survivor gets out. They don't look back. You didn't do this for the reward and the reward reflects that."
+      },
+      "fail_conditions": [
+        {
+          "condition": "npc_desperate_survivor_killed",
+          "description": "The survivor is killed by an enemy. Quest fails."
+        }
+      ]
+    },
+    {
+      "id": "quest_rival_alliance",
+      "name": "Temporary Allies",
+      "type": "side",
+      "giver_npc": "npc_rival_adventurer",
+      "auto_start": false,
+      "description": "The rival adventurer proposes a truce. Share information, divide the dungeon, meet at the vault. The question is whether to trust them.",
+      "lore": "The rival is professional, well-equipped, and has already cleared sections you haven't. They're working the dungeon systematically. Whether their cooperation offer is genuine or tactical is not yet clear.",
+      "objectives": [
+        {
+          "id": "obj_form_alliance",
+          "description": "Accept the rival's alliance proposal.",
+          "completion_trigger": "dialogue_alliance_formed_selected",
+          "journal_entry": "Alliance formed. They have the middle section's map. You have the upper section's. Between you, the picture is more complete."
+        },
+        {
+          "id": "obj_share_info",
+          "description": "Share your map and intelligence with the rival.",
+          "completion_trigger": "map_exchange_completed",
+          "journal_entry": "Maps exchanged. The rival was honest — their section data is accurate. So was yours. The full dungeon layout is now clear."
+        },
+        {
+          "id": "obj_meet_vault",
+          "description": "Both reach the treasure vault.",
+          "completion_trigger": "both_players_at_treasure_vault",
+          "completion_note": "In a single-player game, this objective triggers when the vault is reached — the rival appears independently.",
+          "journal_entry": "The rival is already at the vault door when you arrive. They nod. 'You made it.' The alliance holds, for now."
+        },
+        {
+          "id": "obj_divide_loot",
+          "description": "Divide the vault's contents.",
+          "completion_trigger": "vault_loot_divided",
+          "options": [
+            {
+              "id": "fair_split",
+              "description": "Split evenly.",
+              "outcome": "Player receives half the vault's gold, plus one of the special items. Rival takes the other half. Alliance ends amicably."
+            },
+            {
+              "id": "take_all",
+              "description": "Take everything and leave the rival with nothing.",
+              "check": "Combat — rival turns hostile. Tier 3 encounter.",
+              "on_win": "Keep everything. Rival is defeated.",
+              "on_lose": "Rival takes everything and leaves."
+            },
+            {
+              "id": "let_rival_lead",
+              "description": "Let the rival choose first.",
+              "outcome": "Rival takes the royal scepter. Player takes the crown and the coins. Rival is genuinely surprised by this. 'I won't forget this.' Future dungeon runs: rival appears as ally."
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "xp": 200,
+        "items": ["Varies based on vault division choice"],
+        "narrative": "The alliance worked. That it worked is, in this dungeon, something of a miracle."
+      },
+      "fail_conditions": [
+        {
+          "condition": "player_attacks_rival",
+          "description": "Attacking the rival before the vault ends the alliance and makes them hostile."
+        },
+        {
+          "condition": "rival_killed_by_enemy",
+          "description": "If the rival dies to an enemy before reaching the vault, quest completes early — player receives their map and a note: 'If you're reading this, finish what we started.'"
+        }
+      ]
+    },
+    {
+      "id": "quest_the_mad_scholar",
+      "name": "Three Hundred Years of Notes",
+      "type": "side",
+      "giver_npc": "npc_mad_scholar",
+      "auto_start": false,
+      "description": "The scholar has been in the library for an unknowable amount of time, documenting the dungeon. They want their notes taken out. All of them.",
+      "lore": "The scholar arrived as a researcher. They are still one, technically. But the time has done something to the line between dedication and compulsion. The notes — bound now into five large volumes — represent a complete analysis of the dungeon, the king, the binding, and something the scholar calls 'the arrangement.' Whether the arrangement is a metaphysical observation or a conspiracy is not yet clear.",
+      "objectives": [
+        {
+          "id": "obj_meet_scholar",
+          "description": "Talk to the Mad Scholar in the library.",
+          "completion_trigger": "npc_mad_scholar_met",
+          "journal_entry": "The scholar is in the library. They've been there long enough that it's unclear they could leave on their own."
+        },
+        {
+          "id": "obj_hear_request",
+          "description": "Hear the scholar's request.",
+          "completion_trigger": "dialogue_scholar_request_heard",
+          "journal_entry": "Five volumes of notes. The scholar wants them out — sent to the University of Aldenmere, which may or may not still exist. 'The work must survive,' they said. 'Even if I don't.'"
+        },
+        {
+          "id": "obj_collect_volumes",
+          "description": "Collect all five note volumes from the library.",
+          "completion_trigger": "all_five_volumes_collected",
+          "note": "Volumes are scattered around the library room. Finding all five requires a thorough search (Perception DC 10, auto-succeeds with sufficient time).",
+          "journal_entry": "All five volumes in your pack. They're heavy. They're also the most complete account of this dungeon in existence."
+        },
+        {
+          "id": "obj_scholar_decision",
+          "description": "Decide what to do about the scholar.",
+          "completion_trigger": "scholar_fate_decided",
+          "options": [
+            {
+              "id": "persuade_to_leave",
+              "description": "Convince the scholar to come out with you.",
+              "check": "Persuasion DC 14, or having completed three other quests in the dungeon (the scholar respects experience)",
+              "on_success": "The scholar comes. It takes them twenty minutes to pack. They leave the library for the first time in an unmeasurable span of time. They do not look back.",
+              "on_fail": "'I can't. The work isn't done. But take the volumes. That's enough. That has to be enough.'"
+            },
+            {
+              "id": "leave_scholar",
+              "description": "Take the volumes and leave the scholar behind.",
+              "outcome": "'I know,' the scholar says. 'I knew before I asked. Take good care of them.'"
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "xp": 150,
+        "items": ["lore_fragment"],
+        "special": "The five volumes, if delivered, unlock a bonus dungeon floor in future runs — the scholar's research identified an area below the vault that even the king didn't know about.",
+        "narrative": "The notes leave the dungeon. The knowledge survives. Whether the scholar does is a question that has a different answer depending on your choice."
+      },
+      "fail_conditions": []
+    }
+  ]
+}
